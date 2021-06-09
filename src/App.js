@@ -1,4 +1,6 @@
 import './App.css';
+import Welcome from './components/Welcome'
+import Login from './components/Login'
 
 function App() {
   return (
@@ -7,7 +9,8 @@ function App() {
         <h1>TrackDev</h1>
       </header>
       <main className="App-main">
-        <p>Hello World.</p>
+        <Welcome />
+        <Login />
       </main>
     </div>
   );
