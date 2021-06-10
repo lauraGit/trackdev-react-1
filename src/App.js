@@ -1,6 +1,7 @@
 import './App.css';
 import Welcome from './components/Welcome'
 import Login from './components/Login'
+import Register from './components/Register'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <main className="App-main">
         <Welcome />
         <Login />
+        <Register />
       </main>
     </div>
   );
