@@ -9,6 +9,7 @@ const HeaderLinks = () => {
     if(user && user.isLoggedIn) {
         return (
             <nav>
+                <Link to="/invites">Invites</Link>
                 <LogoutButton />
             </nav>
         )
