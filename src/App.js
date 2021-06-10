@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css';
+import HeaderLinks from './components/HeaderLinks'
 import Welcome from './components/Welcome'
 import Login from './components/Login'
 import Register from './components/Register'
@@ -13,6 +14,7 @@ function App() {
       <div className="App">
         <header className="App-header">
           <h1>TrackDev</h1>
+          <HeaderLinks />
         </header>
         <main className="App-main">
           <Welcome />
