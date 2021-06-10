@@ -1,5 +1,16 @@
+import { useContext } from 'react'
+import UserContext from '../contexts/UserContext'
+
 const Welcome = () => {
-  return (<p>Hello World.</p>)
+  const {user} = useContext(UserContext)
+
+  const greetingName = user && user.isLoggedIn
+    ? user.username
+    : 'World'
+
+  return (
+    <p>Hello {greetingName}.</p>
+  )
 }
 
 export default Welcome

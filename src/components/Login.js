@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import UserContext from '../contexts/UserContext'
 
 class Login extends Component {
   constructor(props) {
@@ -6,7 +7,6 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      loggedIn: false,
       hasApiError: false,
       errorMessage: ''
     }
@@ -34,11 +34,14 @@ class Login extends Component {
         body: JSON.stringify(requestBody)
     })
       .then(async response => {
+        const data = await response.json();
         if(!response.ok) {
-          const errorData = await response.json();
-          this.setState({ hasApiError: true, errorMessage: errorData.message || 'Unknown error from server'})
+          this.setState({ hasApiError: true, errorMessage: data.message || 'Unknown error from server'})
         } else {
-          this.setState({ loggedIn: true })
+          this.context.setUser({
+            isLoggedIn: true,
+            username: data.userdata.username
+          })
         }
       })
       .catch(error => {
@@ -53,7 +56,7 @@ class Login extends Component {
   }
 
   render() {
-    if(this.state.loggedIn) {
+    if(this.context.user && this.context.user.isLoggedIn) {
       return (<div><p>You are logged in.</p></div>)
     }
     return (
@@ -76,5 +79,7 @@ class Login extends Component {
     )
   }
 }
+
+Login.contextType = UserContext
 
 export default Login
