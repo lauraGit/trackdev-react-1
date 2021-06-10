@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import UserContext from '../contexts/UserContext'
 import LogoutButton from './LogoutButton'
+import { Link } from 'react-router-dom'
 
 const HeaderLinks = () => {
     const {user} = useContext(UserContext)
@@ -14,8 +15,8 @@ const HeaderLinks = () => {
     }
     return (
         <nav>
-            <a href="#">Login</a>
-            <a href="#">Register</a>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
         </nav>
     )
 }
