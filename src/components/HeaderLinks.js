@@ -10,7 +10,10 @@ const HeaderLinks = () => {
         return (
             <nav>
                 <Link to="/invites">Invites</Link>
-                <LogoutButton />
+                <div>
+                    <span>{user.username}</span>
+                    <LogoutButton />
+                </div>                
             </nav>
         )
     }
