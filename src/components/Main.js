@@ -3,6 +3,7 @@ import Welcome from './Welcome'
 import Login from './Login'
 import Register from './Register'
 import CreateInvite from './CreateInvite'
+import EnsureLoggedIn from './EnsureLoggedIn'
 
 const Main = () => {
   return (
@@ -15,7 +16,9 @@ const Main = () => {
           <Register />
         </Route>
         <Route path="/invites">
-          <CreateInvite />
+          <EnsureLoggedIn>
+            <CreateInvite />
+          </EnsureLoggedIn>
         </Route>
         <Route path="/">
           <Welcome />
