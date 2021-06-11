@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import Api from '../utils/api'
 
 class CreateInvite extends Component {
   constructor(props) {
@@ -26,14 +27,7 @@ class CreateInvite extends Component {
       email: this.state.email,
       roles: this.state.roles
     }
-    fetch('https://localhost:8080/invites', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(requestBody)
-    })
+    Api.post('/invites', requestBody)
       .then(async response => {
         if(!response.ok) {
           const errorData = await response.json();

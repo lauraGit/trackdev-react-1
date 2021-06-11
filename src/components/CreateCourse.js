@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import Api from '../utils/api'
 
 class CreateCourse extends Component {
   constructor(props) {
@@ -23,14 +24,7 @@ class CreateCourse extends Component {
     var requestBody = {
       name: this.state.name
     }
-    fetch('https://localhost:8080/courses', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(requestBody)
-    })
+    Api.post('/courses', requestBody)
       .then(async response => {
         if(!response.ok) {
           const errorData = await response.json();

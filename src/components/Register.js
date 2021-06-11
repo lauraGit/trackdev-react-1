@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import Api from '../utils/api'
 
 class Register extends Component {
   constructor(props) {
@@ -27,14 +28,7 @@ class Register extends Component {
       email: this.state.email,
       password: this.state.password
     }
-    fetch('https://localhost:8080/users/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(requestBody)
-    })
+    Api.post('/users/register', requestBody)
       .then(async response => {
         if(!response.ok) {
           const errorData = await response.json();

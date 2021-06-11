@@ -1,5 +1,6 @@
 import { Component, Fragment } from 'react'
 import UserContext from '../contexts/UserContext'
+import Api from '../utils/api'
 
 class LogoutButton extends Component {
 
@@ -17,10 +18,7 @@ class LogoutButton extends Component {
     }
 
     requestLogout() {
-        fetch('https://localhost:8080/auth/logout', {
-            method: 'POST',
-            credentials: 'include'
-        })
+        Api.post('/auth/logout', null)
           .then(async response => {
             if(!response.ok) {
               const data = await response.json();
@@ -35,7 +33,7 @@ class LogoutButton extends Component {
           .catch(error => {
             this.setState({ hasApiError: true, errorMessage: 'Unexpected error'})
           })
-      }
+    }
 
     render() {
         return (

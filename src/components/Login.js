@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import UserContext from '../contexts/UserContext'
+import Api from '../utils/api'
 
 class Login extends Component {
   constructor(props) {
@@ -25,14 +26,7 @@ class Login extends Component {
       username: this.state.username,
       password: this.state.password
     }
-    fetch('https://localhost:8080/auth/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(requestBody)
-    })
+    Api.post('/auth/login', requestBody)
       .then(async response => {
         const data = await response.json();
         if(!response.ok) {
