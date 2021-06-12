@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Api from '../utils/api'
 
 class Register extends Component {
@@ -72,6 +73,7 @@ class Register extends Component {
           {
             this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
           }
+          <p>Already have an account? Go to <Link to="/login">login</Link>.</p>
         </form>
       </div>
     )

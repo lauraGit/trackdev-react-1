@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { Link } from 'react-router-dom'
 import UserContext from '../contexts/UserContext'
 import Api from '../utils/api'
 
@@ -70,6 +71,7 @@ class Login extends Component {
           {
             this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
           }
+          <p>Don't have an account yet? Go to <Link to="/register">register</Link>.</p>
         </form>
       </div>
     )
