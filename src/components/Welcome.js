@@ -9,7 +9,7 @@ const Welcome = () => {
     : 'World'
 
   return (
-    <p>Hello {greetingName}.</p>
+    <h2>Hello {greetingName}</h2>
   )
 }
 

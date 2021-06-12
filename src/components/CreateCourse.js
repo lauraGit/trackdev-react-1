@@ -49,13 +49,14 @@ class CreateCourse extends Component {
       return (<div><p>You have created the new course successfully.</p></div>)
     }
     return (
-      <div>
+      <div className="create-course">
+        <h2>New course</h2>
         <form onSubmit={this.handleSubmit}>
           <label>
             Name
             <input name="name" value={this.state.name} onChange={this.handleInputChange}/>
           </label>          
-          <button type="submit">Create</button>
+          <button type="submit">Create course</button>
           {
             this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
           }

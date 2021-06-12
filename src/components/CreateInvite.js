@@ -61,7 +61,8 @@ class CreateInvite extends Component {
       return (<div><p>Invite has been created successfully.</p></div>)
     }
     return (
-      <div>
+      <div className="create-invite">
+        <h2>Invite</h2>
         <form onSubmit={this.handleSubmit}>
           <label>
             Email

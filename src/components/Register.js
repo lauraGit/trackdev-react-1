@@ -53,7 +53,8 @@ class Register extends Component {
       return (<div><p>You have registered successfully.</p></div>)
     }
     return (
-      <div>
+      <div className="register">
+        <h2>Register</h2>
         <form onSubmit={this.handleSubmit}>
           <label>
             Username
