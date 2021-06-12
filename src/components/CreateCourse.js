@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Api from '../utils/api'
 
 class CreateCourse extends Component {
@@ -56,7 +57,7 @@ class CreateCourse extends Component {
             Name
             <input name="name" value={this.state.name} onChange={this.handleInputChange}/>
           </label>          
-          <button type="submit">Create course</button>
+          <button type="submit">Create course</button><Link to="/courses">Cancel</Link>
           {
             this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
           }
