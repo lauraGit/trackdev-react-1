@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import Api from '../utils/api'
 
 class CreateCourse extends Component {
@@ -9,7 +9,8 @@ class CreateCourse extends Component {
       name: '',
       created: false,
       hasApiError: false,
-      errorMessage: ''
+      errorMessage: '',
+      courseId: 0
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -27,11 +28,12 @@ class CreateCourse extends Component {
     }
     Api.post('/courses', requestBody)
       .then(async response => {
+        const data = await response.json();
         if(!response.ok) {
-          const errorData = await response.json();
-          this.setState({ hasApiError: true, errorMessage: errorData.message || 'Unknown error from server'})
+          const data = await response.json();
+          this.setState({ hasApiError: true, errorMessage: data.message || 'Unknown error from server'})
         } else {
-          this.setState({ created: true })
+          this.setState({ created: true, courseId: data.id })
         }
       })
       .catch(error => {
@@ -47,7 +49,7 @@ class CreateCourse extends Component {
 
   render() {
     if(this.state.created) {
-      return (<div><p>You have created the new course successfully.</p></div>)
+      return (<Redirect to={`/courses/${this.state.courseId}`} />)
     }
     return (
       <div className="create-course">

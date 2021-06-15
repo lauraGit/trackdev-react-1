@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Api from '../utils/api'
 
 class CoursesList extends Component {
@@ -40,7 +41,7 @@ class CoursesList extends Component {
       <div>
         <ul>
           {this.state.courses.map(course => 
-            (<li key={course.id}>{course.name}</li>)
+            (<li key={course.id}><Link to={`/courses/${course.id}`}>{course.name}</Link></li>)
             )}
         </ul>
       </div>
