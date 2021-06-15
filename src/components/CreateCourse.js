@@ -57,7 +57,7 @@ class CreateCourse extends Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             Name
-            <input name="name" value={this.state.name} onChange={this.handleInputChange}/>
+            <input name="name" value={this.state.name} onChange={this.handleInputChange} required />
           </label>          
           <button type="submit">Create course</button><Link to="/courses">Cancel</Link>
           {

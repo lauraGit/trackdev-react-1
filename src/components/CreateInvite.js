@@ -66,11 +66,11 @@ class CreateInvite extends Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             Email
-            <input name="email" value={this.state.email} onChange={this.handleInputChange}/>
+            <input name="email" value={this.state.email} onChange={this.handleInputChange} required />
           </label>
           <label>
             Role
-            <select name="roles" value={this.state.roles} onChange={this.handleMultipleSelectChange} multiple={true}>
+            <select name="roles" value={this.state.roles} onChange={this.handleMultipleSelectChange} multiple={true} required>
                 <option value="" disabled>Not selected</option>
                 <option value="STUDENT">Student</option>
                 <option value="PROFESSOR">Professor</option>

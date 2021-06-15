@@ -59,15 +59,15 @@ class Register extends Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             Username
-            <input name="username" value={this.state.username} onChange={this.handleInputChange}/>
+            <input name="username" value={this.state.username} onChange={this.handleInputChange} required />
           </label>
           <label>
             Email
-            <input name="email" value={this.state.email} onChange={this.handleInputChange}/>
+            <input name="email" value={this.state.email} onChange={this.handleInputChange} required />
           </label>
           <label>
             Password
-            <input name="password" type="password" value={this.state.password} onChange={this.handleInputChange}/>
+            <input name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required />
           </label>
           <button type="submit">Register</button>
           {
