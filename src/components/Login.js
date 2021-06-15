@@ -33,7 +33,6 @@ class Login extends Component {
         if(!response.ok) {
           this.setState({ hasApiError: true, errorMessage: data.message || 'Unknown error from server'})
         } else {
-          this.setState({username: '', password: ''})
           this.context.setUser({
             isLoggedIn: true,
             username: data.userdata.username
