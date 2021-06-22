@@ -1,6 +1,7 @@
 import { Component } from "react"
 import { withRouter } from "react-router"
 import Api from '../utils/api'
+import CourseHeaderEditable from "./CourseHeaderEditable"
 
 class Course extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Course extends Component {
       hasError: false,
       course: null
     }
+    this.handleCourseChange = this.handleCourseChange.bind(this)
   }
 
   componentDidMount() {
@@ -27,6 +29,10 @@ class Course extends Component {
       })
   }
 
+  handleCourseChange(course) {
+    this.setState({ course: course })
+  }
+
   render() {
     if(this.state.isLoading) {
       return (<p>Loading...</p>)
@@ -39,9 +45,10 @@ class Course extends Component {
     }
     const course = this.state.course
     return (
-      <div>
-        <h2>{course.name}</h2>
-        <p></p>
+      <div>              
+        <CourseHeaderEditable
+          course={course}
+          onCourseChange={this.handleCourseChange} />
       </div>
     )
   }
