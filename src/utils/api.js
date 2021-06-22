@@ -36,6 +36,16 @@ Api.put = function(relativePath, requestBody) {
 }
 
 /**
+ *  Does a DELETE request to the API.
+ * 
+ * @param {String} relativePath
+ * @returns {Promise} A promise returned by fetch method
+ */
+ Api.delete = function(relativePath) {
+  return Api.send('DELETE', relativePath)
+}
+
+/**
  *  Does a request with a body to the API.
  * 
  * @param {String} method
