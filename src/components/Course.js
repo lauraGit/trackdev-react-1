@@ -1,5 +1,6 @@
 import { Component } from "react"
 import { withRouter } from "react-router"
+import CourseYearsList from "./CourseYearsList"
 import Api from '../utils/api'
 import CourseHeaderEditable from "./CourseHeaderEditable"
 
@@ -49,6 +50,7 @@ class Course extends Component {
         <CourseHeaderEditable
           course={course}
           onCourseChange={this.handleCourseChange} />
+        <CourseYearsList courseYears={course.courseYears} />
       </div>
     )
   }
