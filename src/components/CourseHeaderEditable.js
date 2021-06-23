@@ -39,7 +39,7 @@ class CourseHeaderEditable extends Component {
       .then(async response => {
         const data = await response.json();
         if(!response.ok) {
-          this.setState({ errors: { edit: data.message } || 'Unknown error from server'})
+          this.setState({ errors: { edit: data.message || 'Unknown error from server' }})
         } else {
           this.props.onCourseChange(data)
           this.setState({mode: "normal", errors: {}})
@@ -75,34 +75,33 @@ class CourseHeaderEditable extends Component {
     const course = this.props.course
     if(this.state.mode === "edit") {
       return (
-        <div class="course-header-editable">
-          <form onSubmit={this.handleSubmit} class="course-header-editable__content">
+        <div className="course-header-editable">
+          <form onSubmit={this.handleSubmit} className="course-header-editable__content">
             <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange}/>
             <button type="submit">Save</button>
             <button type="button" onClick={this.handleCancelClick}>Cancel</button>          
           </form>        
-          <div class="course-header-editable__error">
+          <div className="course-header-editable__error">
           {
               this.state.errors.edit ? (<p>{this.state.errors.edit}</p>) : null
           }
           </div>
-        </div>
-        
+        </div>        
       )
     }
     if(this.state.mode === "deleted") {
       return (<Redirect to="/courses" />)
     }
     return (
-      <div class="course-header-editable">
-        <div class="course-header-editable__content">
+      <div className="course-header-editable">
+        <div className="course-header-editable__content">
           <h2>{course.name}</h2>
           <div>
             <button type="button" onClick={this.handleEditClick}>Edit</button>
             <button type="button" onClick={this.handleDeleteClick}>Delete</button>
           </div>
         </div>
-        <div class="course-header-editable__error">
+        <div className="course-header-editable__error">
           {
             this.state.errors.delete ? (<p>{this.state.errors.delete}</p>) : null
           }

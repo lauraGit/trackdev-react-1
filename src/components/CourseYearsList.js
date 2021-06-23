@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom"
+import CreateCourseYear from "./CreateCourseYear"
 
 const CourseYearsList = (props) => {
   const courseYears = props.courseYears
   return (
     <div>
       <h3>Course years</h3>
+      <CreateCourseYear courseId={props.courseId}/>
       <ul>
         {
           courseYears.map(courseYear => (

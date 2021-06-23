@@ -50,7 +50,7 @@ class Course extends Component {
         <CourseHeaderEditable
           course={course}
           onCourseChange={this.handleCourseChange} />
-        <CourseYearsList courseYears={course.courseYears} />
+        <CourseYearsList courseId={course.id} courseYears={course.courseYears} />
       </div>
     )
   }
