@@ -28,6 +28,7 @@ const CreateCourseYear = (props) => {
       if(!response.ok) {
         setErrors({ create: data.message || 'Unknown error from server' })
       } else {
+        props.onCourseTouched()
         resetState()
       }
     })
