@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import UserContext from '../contexts/UserContext'
 import Api from '../utils/api'
 
@@ -52,7 +52,7 @@ class Login extends Component {
 
   render() {
     if(this.context.user && this.context.user.isLoggedIn) {
-      return (<div><p>You are logged in.</p></div>)
+      return (<Redirect to="/" />)
     }
     return (
       <div className="login">
