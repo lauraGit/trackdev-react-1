@@ -49,7 +49,7 @@ const CourseYear = (props) => {
       <div>
         <h3>Invites</h3>
         <InviteToCourseYear courseYearId={courseYearId} onInvitesTouched={handleInvitesTouched} />
-        <CourseInvitesList courseYearId={courseYearId} invites={invites} />
+        <CourseInvitesList courseYearId={courseYearId} invites={invites} onInvitesTouched={handleInvitesTouched} />
       </div>
     </div>
   )
