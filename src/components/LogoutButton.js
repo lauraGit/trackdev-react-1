@@ -7,8 +7,7 @@ class LogoutButton extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            hasApiError: false,
-            errorMessage: ''
+            error: null
         }
         this.handleClick = this.handleClick.bind(this)
     }
@@ -19,19 +18,11 @@ class LogoutButton extends Component {
 
     requestLogout() {
         Api.post('/auth/logout', null)
-          .then(async response => {
-            if(!response.ok) {
-              const data = await response.json();
-              this.setState({ hasApiError: true, errorMessage: data.message || 'Unknown error from server'})
-            } else {
-              this.context.setUser({
-                isLoggedIn: false,
-                username: ''
-              })
-            }
+          .then(data => {
+            this.context.setUser({ isLoggedIn: false, username: '' })
           })
           .catch(error => {
-            this.setState({ hasApiError: true, errorMessage: 'Unexpected error'})
+            this.setState({ error: error?.details?.message || 'Unknown error'})
           })
     }
 
@@ -42,7 +33,7 @@ class LogoutButton extends Component {
                     Logout
                 </button>
                 {
-                    this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
+                    this.error ? (<p>{this.error}</p>) : null
                 }
             </Fragment>
         )

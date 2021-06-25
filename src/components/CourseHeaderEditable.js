@@ -36,17 +36,12 @@ class CourseHeaderEditable extends Component {
       name: this.state.name
     }
     Api.put('/courses/' + this.props.course.id, requestBody)
-      .then(async response => {
-        const data = await response.json();
-        if(!response.ok) {
-          this.setState({ errors: { edit: data.message || 'Unknown error from server' }})
-        } else {
-          this.props.onCourseChange(data)
-          this.setState({mode: "normal", errors: {}})
-        }
+      .then(data => {        
+        this.props.onCourseChange(data)
+        this.setState({mode: "normal", errors: {}})        
       })
       .catch(error => {
-        this.setState({ errors: { edit: 'Unexpected error' }})
+        this.setState({ errors: { edit: error?.details?.message || 'Unknown error' }})
       })
   }
 
@@ -58,16 +53,11 @@ class CourseHeaderEditable extends Component {
 
   handleDeleteClick() {
     Api.delete('/courses/' + this.props.course.id)
-      .then(async response => {
-        if(!response.ok) {
-          const data = await response.json();
-          this.setState({ errors: { delete: data.message } || 'Unknown error from server'})
-        } else {
+      .then(data => {
           this.setState({mode: "deleted", errors: {}})
-        }
       })
       .catch(error => {
-        this.setState({ errors: { delete: 'Unexpected error'}})
+        this.setState({ errors: { delete: error?.details?.message || 'Unknown error' }})
       })
   }
 

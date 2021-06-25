@@ -14,17 +14,13 @@ class CoursesList extends Component {
 
   componentDidMount() {
     Api.get('/courses')
-      .then(async response => {
-        const data = await response.json();
-        if(!response.ok) {          
-          this.setState({ isLoading: false, hasError: true })
-        } else {
-          this.setState({ isLoading: false, courses: data })
-        }
+      .then(data => {
+        this.setState({ courses: data })
       })
       .catch(error => {
         this.setState({ hasError: true})
       })
+      .finally(() => this.setState({ isLoading: false }))
   }
 
   render() {

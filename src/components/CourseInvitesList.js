@@ -6,19 +6,17 @@ const CourseInvitesList = ({ courseYearId, invites, onInvitesTouched }) => {
 
   function handleDeleteClick(inviteId) {
     Api.delete(`/invites/${inviteId}`)
-      .then(async response => {
-        if(!response.ok) {
-          const data = await response.json();
-          setError( data.message || 'Unknown error from server' )
-        } else {
-          onInvitesTouched()
-        }
-      })
-      .catch(error => {
-        setError('Unexpected error')
-      })
+      .then(data =>  onInvitesTouched())
+      .catch(error => setError(error?.details?.message || 'Unknown error') )
   }
 
+  // Render
+  if(invites == null) {
+    return null
+  }
+  if(invites.length === 0) {
+    return <p>You don't have any open invites for this course year.</p>
+  }
   return (
     <div>
       {

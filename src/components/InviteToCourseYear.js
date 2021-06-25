@@ -23,18 +23,11 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
     Api.post(`/courses/years/${courseYearId}/invites`, {
       email: email
     })
-    .then(async response => {
-      const data = await response.json();
-      if(!response.ok) {
-        setErrors({ create: data.message || 'Unknown error from server' })
-      } else {
-        onInvitesTouched()
-        resetState()
-      }
+    .then(data => {  
+      onInvitesTouched()
+      resetState()
     })
-    .catch(error => {
-      setErrors({ create: 'Unexpected error' })
-    })
+    .catch(error => setErrors({ create: error?.details?.message || 'Unknown error' }))
   }
 
   function resetState() {

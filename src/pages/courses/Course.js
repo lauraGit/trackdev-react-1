@@ -21,19 +21,15 @@ class Course extends Component {
     this.requestCourse()
   }
 
-  async requestCourse() {
+  requestCourse() {
     Api.get('/courses/'+ this.props.match.params.courseId)
-      .then(async response => {
-        const data = await response.json();
-        if(!response.ok) {          
-          this.setState({ isLoading: false, hasError: true })
-        } else {
-          this.setState({ isLoading: false, course: data })
-        }
+      .then(data => {
+        this.setState({ course: data })
       })
       .catch(error => {
         this.setState({ hasError: true})
       })
+      .finally(() => this.setState( { isLoading: false }))
   }
 
   handleCourseChange(course) {

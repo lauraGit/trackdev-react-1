@@ -23,18 +23,11 @@ const CreateCourseYear = (props) => {
     Api.post(`/courses/${props.courseId}/years`, {
       startYear: startYear
     })
-    .then(async response => {
-      const data = await response.json();
-      if(!response.ok) {
-        setErrors({ create: data.message || 'Unknown error from server' })
-      } else {
-        props.onCourseTouched()
-        resetState()
-      }
+    .then(data => {
+      props.onCourseTouched()
+      resetState()
     })
-    .catch(error => {
-      setErrors({ create: 'Unexpected error' })
-    })
+    .catch(error => setErrors({ create: error?.details?.message || 'Unknown error' }))
   }
 
   function resetState() {

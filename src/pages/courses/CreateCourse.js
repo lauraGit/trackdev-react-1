@@ -8,8 +8,7 @@ class CreateCourse extends Component {
     this.state = {
       name: '',
       created: false,
-      hasApiError: false,
-      errorMessage: '',
+      error: '',
       courseId: 0
     }
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -18,7 +17,7 @@ class CreateCourse extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({ hasApiError: false, errorMessage: ''})
+    this.setState({ error: ''})
     this.requestCreate()
   }
 
@@ -27,18 +26,10 @@ class CreateCourse extends Component {
       name: this.state.name
     }
     Api.post('/courses', requestBody)
-      .then(async response => {
-        const data = await response.json();
-        if(!response.ok) {
-          const data = await response.json();
-          this.setState({ hasApiError: true, errorMessage: data.message || 'Unknown error from server'})
-        } else {
-          this.setState({ created: true, courseId: data.id })
-        }
+      .then(data => {  
+        this.setState({ created: true, courseId: data.id })
       })
-      .catch(error => {
-        this.setState({ hasApiError: true, errorMessage: 'Unexpected error'})
-      })
+      .catch(error => this.setState({ error: error?.details?.message || 'Unknown error'}))
   }
 
   handleInputChange(e) {
@@ -61,7 +52,7 @@ class CreateCourse extends Component {
           </label>          
           <button type="submit">Create course</button><Link to="/courses">Cancel</Link>
           {
-            this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
+            this.state.error ? (<p>{this.state.error}</p>) : null
           }
         </form>
       </div>

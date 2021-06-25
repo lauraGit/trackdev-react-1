@@ -9,8 +9,7 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      hasApiError: false,
-      errorMessage: ''
+      error: null
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -28,19 +27,14 @@ class Login extends Component {
       password: this.state.password
     }
     Api.post('/auth/login', requestBody)
-      .then(async response => {
-        const data = await response.json();
-        if(!response.ok) {
-          this.setState({ hasApiError: true, errorMessage: data.message || 'Unknown error from server'})
-        } else {
+      .then(data => {
           this.context.setUser({
             isLoggedIn: true,
             username: data.userdata.username
           })
-        }
       })
       .catch(error => {
-        this.setState({ hasApiError: true, errorMessage: 'Unexpected error'})
+        this.setState({ error: error?.details?.message || 'Unknown error'})
       })
   }
 
@@ -68,7 +62,7 @@ class Login extends Component {
           </label>
           <button type="submit">Login</button>
           {
-            this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
+            this.state.error ? (<p>{this.state.error}</p>) : null
           }
           <p>Don't have an account yet? Go to <Link to="/register">register</Link>.</p>
         </form>

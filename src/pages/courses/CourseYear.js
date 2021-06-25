@@ -14,21 +14,11 @@ const CourseYear = (props) => {
     requestInvites()
   }, [])
 
-  async function requestInvites() {
+  function requestInvites() {
     Api.get(`/invites?type=courseYear&courseYearId=${courseYearId}`)
-      .then(async response => {
-        const data = await response.json();
-        if(!response.ok) {          
-          setHasError(true)
-        } else {
-          setInvites(data)
-        }
-        setIsLoading(false)
-      })
-      .catch(error => {
-        setIsLoading(false)
-        setHasError(true)
-      })
+      .then(data => setInvites(data))
+      .catch(error => setHasError(true))
+      .finally(() => setIsLoading(false))
   }
 
   function handleInvitesTouched() {
