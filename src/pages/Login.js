@@ -28,10 +28,12 @@ class Login extends Component {
     }
     Api.post('/auth/login', requestBody)
       .then(data => {
-          this.context.setUser({
-            isLoggedIn: true,
-            username: data.userdata.username
-          })
+        this.context.setUser({
+          isLoggedIn: true,
+          profile: {
+            username: data.userdata?.username
+          }
+        })
       })
       .catch(error => {
         this.setState({ error: error?.details?.message || 'Unknown error'})

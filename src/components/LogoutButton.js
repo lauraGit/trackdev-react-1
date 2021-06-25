@@ -19,7 +19,7 @@ class LogoutButton extends Component {
     requestLogout() {
         Api.post('/auth/logout', null)
           .then(data => {
-            this.context.setUser({ isLoggedIn: false, username: '' })
+            this.context.setUser({ isLoggedIn: false, profile: null })
           })
           .catch(error => {
             this.setState({ error: error?.details?.message || 'Unknown error'})

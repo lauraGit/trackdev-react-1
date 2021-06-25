@@ -5,9 +5,12 @@ const EnsureLoggedIn = (props) => {
     return (
       <UserContext.Consumer>
         {({user}) => {
-            const innerElement = user && user.isLoggedIn
-            ? props.children
-            : <Redirect to="/login" />
+            let innerElement = null
+            if(user) {
+              innerElement = user.isLoggedIn
+                ? props.children
+                : <Redirect to="/login" />
+            }
             return innerElement
         }}
       </UserContext.Consumer>          
