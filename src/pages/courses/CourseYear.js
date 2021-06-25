@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
 import CourseInvitesList from "../../components/CourseInvitesList"
+import Restricted from '../../components/Restricted'
 import Api from "../../utils/api"
 
 const CourseYear = (props) => {
@@ -36,11 +37,13 @@ const CourseYear = (props) => {
   return (
     <div>
       <h2>Course Year</h2>
-      <div>
-        <h3>Invites</h3>
-        <InviteToCourseYear courseYearId={courseYearId} onInvitesTouched={handleInvitesTouched} />
-        <CourseInvitesList courseYearId={courseYearId} invites={invites} onInvitesTouched={handleInvitesTouched} />
-      </div>
+      <Restricted allowed={["PROFESSOR"]}>
+        <div>
+          <h3>Invites</h3>
+          <InviteToCourseYear courseYearId={courseYearId} onInvitesTouched={handleInvitesTouched} />
+          <CourseInvitesList courseYearId={courseYearId} invites={invites} onInvitesTouched={handleInvitesTouched} />
+        </div>  
+      </Restricted>
     </div>
   )
 }

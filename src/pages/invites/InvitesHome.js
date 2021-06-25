@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ReceivedInvitesList from "../../components/ReceivedInvitesList"
 import RoleInvitesList from "../../components/RoleInvitesList"
+import Restricted from "../../components/Restricted"
 import Api from "../../utils/api"
 
 const InvitesHome = (props) => {
@@ -49,11 +50,13 @@ const InvitesHome = (props) => {
         <h3>Received</h3>
         <ReceivedInvitesList invites={receivedInvites} onInvitesTouched={handleInvitesTouched} />
       </div>
-      <div>
-        <h3>Sent</h3>
-        <Link to="/invites/create">Invite</Link>
-        <RoleInvitesList invites={sentInvites} onInvitesTouched={handleInvitesTouched} />
-      </div>
+      <Restricted allowed={["PROFESSOR", "ADMIN"]}>
+        <div>
+          <h3>Sent</h3>
+          <Link to="/invites/create">Invite</Link>
+          <RoleInvitesList invites={sentInvites} onInvitesTouched={handleInvitesTouched} />
+        </div>
+      </Restricted>
     </div>
   )
 }

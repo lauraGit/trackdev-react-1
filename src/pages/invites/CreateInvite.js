@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import Restricted from "../../components/Restricted"
 import Api from '../../utils/api'
 
 class CreateInvite extends Component {
@@ -53,28 +54,30 @@ class CreateInvite extends Component {
       return (<div><p>Invite has been created successfully.</p></div>)
     }
     return (
-      <div className="create-invite">
-        <h2>Invite</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Email
-            <input name="email" value={this.state.email} onChange={this.handleInputChange} required />
-          </label>
-          <label>
-            Role
-            <select name="roles" value={this.state.roles} onChange={this.handleMultipleSelectChange} multiple={true} required>
-                <option value="" disabled>Not selected</option>
-                <option value="STUDENT">Student</option>
-                <option value="PROFESSOR">Professor</option>
-                <option value="ADMIN">Admin</option>
-            </select>
-          </label>
-          <button type="submit">Invite</button>
-          {
-            this.state.error ? (<p>{this.state.error}</p>) : null
-          }
-        </form>
-      </div>
+      <Restricted allowed={["PROFESSOR", "ADMIN"]} fallback={(<p>You don't have access to here.</p>)}>
+        <div className="create-invite">
+          <h2>Invite</h2>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Email
+              <input name="email" value={this.state.email} onChange={this.handleInputChange} required />
+            </label>
+            <label>
+              Role
+              <select name="roles" value={this.state.roles} onChange={this.handleMultipleSelectChange} multiple={true} required>
+                  <option value="" disabled>Not selected</option>
+                  <option value="STUDENT">Student</option>
+                  <option value="PROFESSOR">Professor</option>
+                  <option value="ADMIN">Admin</option>
+              </select>
+            </label>
+            <button type="submit">Invite</button>
+            {
+              this.state.error ? (<p>{this.state.error}</p>) : null
+            }
+          </form>
+        </div>
+      </Restricted>
     )
   }
 }

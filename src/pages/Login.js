@@ -30,9 +30,7 @@ class Login extends Component {
       .then(data => {
         this.context.setUser({
           isLoggedIn: true,
-          profile: {
-            username: data.userdata?.username
-          }
+          profile: data.userdata
         })
       })
       .catch(error => {
