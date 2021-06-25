@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './Home'
 import Login from './Login'
 import Register from './Register'
-import CreateInvite from './CreateInvite'
+import InvitesRoutes from './InvitesRoutes'
 import CoursesRoutes from './CoursesRoutes'
 import NotFoundPage from './shared/NotFoundPage'
 import EnsureLoggedIn from '../components/EnsureLoggedIn'
@@ -18,9 +18,9 @@ const MainRoutes = () => {
         <Route exact path="/register">
           <Register />
         </Route>
-        <Route exact path="/invites">
+        <Route path="/invites">
           <EnsureLoggedIn>
-            <CreateInvite />
+            <InvitesRoutes />
           </EnsureLoggedIn>
         </Route>
         <Route path="/courses">

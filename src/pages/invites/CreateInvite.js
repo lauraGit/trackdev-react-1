@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import Api from '../utils/api'
+import Api from '../../utils/api'
 
 class CreateInvite extends Component {
   constructor(props) {
@@ -8,8 +8,7 @@ class CreateInvite extends Component {
       email: '',
       roles: [],
       created: false,
-      hasApiError: false,
-      errorMessage: ''
+      error: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -18,7 +17,7 @@ class CreateInvite extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({ hasApiError: false, errorMessage: ''})
+    this.setState({ error: ''})
     this.requestCreateInvite()
   }
 
@@ -28,17 +27,10 @@ class CreateInvite extends Component {
       roles: this.state.roles
     }
     Api.post('/invites', requestBody)
-      .then(async response => {
-        if(!response.ok) {
-          const errorData = await response.json();
-          this.setState({ hasApiError: true, errorMessage: errorData.message || 'Unknown error from server'})
-        } else {
-          this.setState({ created: true })
-        }
+      .then(data => {
+        this.setState({ created: true })        
       })
-      .catch(error => {
-        this.setState({ hasApiError: true, errorMessage: 'Unexpected error'})
-      })
+      .catch(error => this.setState({ error: error?.details?.message || 'Unknown error'}) )
   }
 
   handleInputChange(e) {
@@ -79,7 +71,7 @@ class CreateInvite extends Component {
           </label>
           <button type="submit">Invite</button>
           {
-            this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
+            this.state.error ? (<p>{this.state.error}</p>) : null
           }
         </form>
       </div>
