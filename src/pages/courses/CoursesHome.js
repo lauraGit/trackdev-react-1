@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import CoursesList from './CoursesList'
+import CoursesList from '../../components/CoursesList'
 
 const CoursesHome = () => {
   return (

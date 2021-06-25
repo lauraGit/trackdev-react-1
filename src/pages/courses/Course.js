@@ -1,9 +1,9 @@
 import { Component } from "react"
 import { withRouter } from "react-router"
-import Api from '../utils/api'
-import CourseHeaderEditable from "./CourseHeaderEditable"
-import CourseYearsList from "./CourseYearsList"
-import CreateCourseYear from "./CreateCourseYear"
+import Api from '../../utils/api'
+import CourseHeaderEditable from "../../components/CourseHeaderEditable"
+import CourseYearsList from "../../components/CourseYearsList"
+import CreateCourseYear from "../../components/CreateCourseYear"
 
 class Course extends Component {
   constructor(props) {

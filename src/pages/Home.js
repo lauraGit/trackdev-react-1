@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import UserContext from '../contexts/UserContext'
 
-const Welcome = () => {
+const Home = () => {
   const {user} = useContext(UserContext)
 
   const greetingName = user && user.isLoggedIn
@@ -13,4 +13,4 @@ const Welcome = () => {
   )
 }
 
-export default Welcome
+export default Home

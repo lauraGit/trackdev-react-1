@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import UserContext from './contexts/UserContext'
 import Header from './components/Header'
 import Main from './components/Main'
+import MainRoutes from './pages/MainRoutes'
 
 function App() {
   const [user, setUser] = useState({ loggedIn: false, username: null})
@@ -13,7 +14,9 @@ function App() {
       <Router>
         <div className="app">
           <Header />
-          <Main />
+          <Main>
+            <MainRoutes />
+          </Main>   
         </div>
       </Router>
     </UserContext.Provider>

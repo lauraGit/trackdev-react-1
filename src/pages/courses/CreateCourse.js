@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import Api from '../utils/api'
+import Api from '../../utils/api'
 
 class CreateCourse extends Component {
   constructor(props) {

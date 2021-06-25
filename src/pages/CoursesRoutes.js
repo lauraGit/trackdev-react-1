@@ -1,13 +1,14 @@
+import { Fragment } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import CoursesHome from './CoursesHome'
-import Course from './Course'
-import CourseYear from './CourseYear'
-import CreateCourse from './CreateCourse'
-import NotFoundPage from './NotFoundPage'
+import CoursesHome from './courses/CoursesHome'
+import Course from './courses/Course'
+import CourseYear from './courses/CourseYear'
+import CreateCourse from './courses/CreateCourse'
+import NotFoundPage from './shared/NotFoundPage'
 
-const Courses = () => {
+const CoursesRoutes = () => {
   return (
-    <div>
+    <Fragment>
       <Switch>
         <Route exact path="/courses/create">
           <CreateCourse />
@@ -25,8 +26,8 @@ const Courses = () => {
           <NotFoundPage />
         </Route>
       </Switch>
-    </div>
+    </Fragment>
   )
 }
 
-export default Courses
+export default CoursesRoutes
