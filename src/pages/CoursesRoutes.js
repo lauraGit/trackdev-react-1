@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import CoursesHome from './courses/CoursesHome'
 import Course from './courses/Course'
+import CreateGroup from './courses/CreateGroup'
 import CourseYear from './courses/CourseYear'
 import CreateCourse from './courses/CreateCourse'
 import NotFoundPage from './shared/NotFoundPage'
@@ -13,10 +14,13 @@ const CoursesRoutes = () => {
         <Route exact path="/courses/create">
           <CreateCourse />
         </Route>
-        <Route path="/courses/years/:courseYearId">
+        <Route exact path="/courses/years/:courseYearId/groups/create">
+          <CreateGroup />
+        </Route>
+        <Route exact path="/courses/years/:courseYearId">
           <CourseYear />
         </Route>
-        <Route path="/courses/:courseId">
+        <Route exact path="/courses/:courseId">
           <Course />
         </Route>
         <Route exact path="/courses">

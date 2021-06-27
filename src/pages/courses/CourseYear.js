@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
+import { Link } from "react-router-dom"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
 import CourseInvitesList from "../../components/CourseInvitesList"
 import CourseStudentsList from "../../components/CourseStudentsList"
@@ -67,6 +68,9 @@ const CourseYear = (props) => {
       <h2>Course Year</h2>
       <div>
         <h3>Groups</h3>
+        <Restricted allowed={["PROFESSOR"]}>
+          <Link to={`/courses/years/${courseYearId}/groups/create`}>New group</Link>
+        </Restricted>
         <CourseGroupsList courseYearId={courseYearId} groups={groups} onGroupsTouched={handleGroupsTouched} />
       </div>
       <Restricted allowed={["PROFESSOR"]}>

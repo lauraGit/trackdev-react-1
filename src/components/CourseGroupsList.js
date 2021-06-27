@@ -17,7 +17,9 @@ const CourseGroupsList = ({ groups }) => {
                 <strong>{group.name}</strong>
                 <div>
                   {
-                    group.members?.map(member => (<span>@{member.username}</span>))
+                    group.members?.map(member => 
+                      (<span key={member.username}>@{member.username}</span>)
+                      )
                   }
                 </div>
               </div>

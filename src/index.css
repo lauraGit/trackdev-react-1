@@ -15,7 +15,8 @@ body {
 }
 
 .create-invite,
-.create-course {
+.create-course,
+.create-group {
   max-width: 600px;
 }
 
