@@ -3,6 +3,7 @@ import { useParams } from "react-router"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
 import CourseInvitesList from "../../components/CourseInvitesList"
 import CourseStudentsList from "../../components/CourseStudentsList"
+import CourseGroupsList from "../../components/CourseGroupsList"
 import Restricted from '../../components/Restricted'
 import Api from "../../utils/api"
 
@@ -12,10 +13,12 @@ const CourseYear = (props) => {
   const [ hasError, setHasError] = useState(false)
   const [ invites, setInvites ] = useState(null)
   const [ students, setStudents ] = useState(null)
+  const [ groups, setGroups ] = useState(null)
 
   useEffect(() => {
     requestInvites()
     requestStudents()
+    requestGroups()
   }, [])
 
   function requestInvites() {
@@ -32,12 +35,23 @@ const CourseYear = (props) => {
       .finally(() => setIsLoading(false))
   }
 
+  function requestGroups() {
+    Api.get(`/courses/years/${courseYearId}/groups`)
+      .then(data => setGroups(data))
+      .catch(error => setHasError(true))
+      .finally(() => setIsLoading(false))
+  }
+
   function handleInvitesTouched() {
     requestInvites()
   }
 
   function handleStudentsTouched() {
     requestStudents()
+  }
+
+  function handleGroupsTouched() {
+    requestGroups()
   }
 
   if(isLoading) {
@@ -51,6 +65,10 @@ const CourseYear = (props) => {
   return (
     <div>
       <h2>Course Year</h2>
+      <div>
+        <h3>Groups</h3>
+        <CourseGroupsList courseYearId={courseYearId} groups={groups} onGroupsTouched={handleGroupsTouched} />
+      </div>
       <Restricted allowed={["PROFESSOR"]}>
         <div>
           <h3>Students</h3>
