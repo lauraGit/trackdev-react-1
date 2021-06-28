@@ -1,0 +1,12 @@
+.course-groups-list > * {
+  display: inline-block;
+  width: 33%;
+}
+
+.group-card {
+  border: 1px solid gray;
+  padding: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 4px;
+}

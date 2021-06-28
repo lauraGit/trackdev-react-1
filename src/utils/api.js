@@ -4,12 +4,29 @@ const apiBaseUrl = 'https://localhost:8080'
 const requiresCors = true
 
 /**
+ *  Reads the JSON response from a fetch operation,
+ * 
+ * @param {Promise} Promise returned by a fetch operation 
+ * @returns {Promise} The data response from the API
+ */
+async function getData(response) {
+  let data = null
+  if(response.status !== 204) {
+    data = await response.json()
+  }
+  if(!response.ok) {
+    throw { status: response.status, details: data }
+  }
+  return data
+}
+
+/**
  *  Does a GET request to the API.
  * 
  * @param {String} relativePath 
- * @returns {Promise} A promise returned by fetch method
+ * @returns {Promise} The data response from the API
  */
-Api.get = function(relativePath) {
+Api.get = async function(relativePath) {
   return Api.send('GET', relativePath)
 }
 
@@ -18,18 +35,18 @@ Api.get = function(relativePath) {
  * 
  * @param {String} relativePath 
  * @param {Object} requestBody 
- * @returns {Promise} A promise returned by fetch method
+ * @returns {Promise} The data response from the API
  */
-Api.post = function(relativePath, requestBody) {
+Api.post = async function(relativePath, requestBody) {
   return Api.send('POST', relativePath, requestBody)
 }
 
 /**
- *  Does a PATCH request to the API.
+ *  Does a PUT request to the API.
  * 
  * @param {String} relativePath 
  * @param {Object} requestBody 
- * @returns {Promise} A promise returned by fetch method
+ * @returns {Promise} The data response from the API
  */
 Api.put = function(relativePath, requestBody) {
   return Api.send('PUT', relativePath, requestBody)
@@ -39,10 +56,21 @@ Api.put = function(relativePath, requestBody) {
  *  Does a DELETE request to the API.
  * 
  * @param {String} relativePath
- * @returns {Promise} A promise returned by fetch method
+ * @returns {Promise} The data response from the API
  */
  Api.delete = function(relativePath) {
   return Api.send('DELETE', relativePath)
+}
+
+/**
+ *  Does a PATCH request to the API.
+ * 
+ * @param {String} relativePath 
+ * @param {Object} requestBody 
+ * @returns {Promise} The data response from the API
+ */
+ Api.patch = function(relativePath, requestBody) {
+  return Api.send('PATCH', relativePath, requestBody)
 }
 
 /**
@@ -51,9 +79,9 @@ Api.put = function(relativePath, requestBody) {
  * @param {String} method
  * @param {String} relativePath 
  * @param {Object} requestBody 
- * @returns {Promise} A promise returned by fetch method
+ * @returns {Promise} The data response from the API
  */
-Api.send = function(method, relativePath, requestBody) {
+Api.send = async function(method, relativePath, requestBody) {
   let options = {}
   if(requiresCors) {
     options.credentials = 'include'
@@ -65,7 +93,8 @@ Api.send = function(method, relativePath, requestBody) {
     }
     options.body = JSON.stringify(requestBody)
   }
-  return fetch(apiBaseUrl + relativePath, options)
+  const response = await fetch(apiBaseUrl + relativePath, options)
+  return getData(response)
 }
 
 export default Api

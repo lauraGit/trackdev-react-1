@@ -1,7 +1,9 @@
 import { Component } from "react"
 import { withRouter } from "react-router"
-import Api from '../utils/api'
-import CourseHeaderEditable from "./CourseHeaderEditable"
+import Api from '../../utils/api'
+import CourseHeaderEditable from "../../components/CourseHeaderEditable"
+import CourseYearsList from "../../components/CourseYearsList"
+import CreateCourseYear from "../../components/CreateCourseYear"
 
 class Course extends Component {
   constructor(props) {
@@ -12,25 +14,30 @@ class Course extends Component {
       course: null
     }
     this.handleCourseChange = this.handleCourseChange.bind(this)
+    this.handleCourseTouched = this.handleCourseTouched.bind(this)
   }
 
   componentDidMount() {
+    this.requestCourse()
+  }
+
+  requestCourse() {
     Api.get('/courses/'+ this.props.match.params.courseId)
-      .then(async response => {
-        const data = await response.json();
-        if(!response.ok) {          
-          this.setState({ isLoading: false, hasError: true })
-        } else {
-          this.setState({ isLoading: false, course: data })
-        }
+      .then(data => {
+        this.setState({ course: data })
       })
       .catch(error => {
         this.setState({ hasError: true})
       })
+      .finally(() => this.setState( { isLoading: false }))
   }
 
   handleCourseChange(course) {
     this.setState({ course: course })
+  }
+
+  handleCourseTouched() {
+    this.requestCourse()
   }
 
   render() {
@@ -49,6 +56,9 @@ class Course extends Component {
         <CourseHeaderEditable
           course={course}
           onCourseChange={this.handleCourseChange} />
+        <h3>Course years</h3>
+        <CreateCourseYear courseId={course.id} onCourseTouched={this.handleCourseTouched} />
+        <CourseYearsList courseId={course.id} courseYears={course.courseYears} />
       </div>
     )
   }

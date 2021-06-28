@@ -10,8 +10,7 @@ class Register extends Component {
       email: '',
       password: '',
       registered: false,
-      hasApiError: false,
-      errorMessage: ''
+      error: null
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -30,16 +29,11 @@ class Register extends Component {
       password: this.state.password
     }
     Api.post('/users/register', requestBody)
-      .then(async response => {
-        if(!response.ok) {
-          const errorData = await response.json();
-          this.setState({ hasApiError: true, errorMessage: errorData.message || 'Unknown error from server'})
-        } else {
-          this.setState({ registered: true })
-        }
+      .then(data => {
+        this.setState({ registered: true })        
       })
       .catch(error => {
-        this.setState({ hasApiError: true, errorMessage: 'Unexpected error'})
+        this.setState({ error: error?.details?.message || 'Unknown error'})
       })
   }
 
@@ -71,7 +65,7 @@ class Register extends Component {
           </label>
           <button type="submit">Register</button>
           {
-            this.state.hasApiError ? (<p>{this.state.errorMessage}</p>) : null
+            this.state.error ? (<p>{this.error}</p>) : null
           }
           <p>Already have an account? Go to <Link to="/login">login</Link>.</p>
         </form>

@@ -7,7 +7,11 @@ import { Link } from 'react-router-dom'
 const HeaderLinks = () => {
   const {user} = useContext(UserContext)
 
-  if(user && user.isLoggedIn) {
+  if(!user) {
+    return null
+  }
+
+  if(user.isLoggedIn) {
     return (
       <Fragment>
         <nav>
@@ -15,7 +19,7 @@ const HeaderLinks = () => {
           <Link to="/courses">Courses</Link>    
         </nav>
         <div>
-            <span>{user.username}</span>
+            <span>{user.profile?.username}</span>
             <LogoutButton />
         </div>  
       </Fragment>
