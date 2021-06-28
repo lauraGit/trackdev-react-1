@@ -12,12 +12,22 @@ class CreateGroup extends Component {
       name: '',
       members: [],
       created: false,
-      error: ''
+      error: '',
+      students: []
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleMultiListInputChange = this.handleMultiListInputChange.bind(this)
     this.courseYearId = this.props.match.params.courseYearId
+  }
+
+  componentDidMount() {
+    this.requestStudents()
+  }
+
+  requestStudents() {
+    Api.get(`/courses/years/${this.courseYearId}/students`)
+      .then(data => this.setState({ students: data}))
   }
 
   handleSubmit(e) {
@@ -48,6 +58,8 @@ class CreateGroup extends Component {
 
   render() {
     const backUrl = `/courses/years/${this.courseYearId}`
+    const possibleStudents = this.state.students
+                        .map(student => student.username)
 
     if(this.state.created) {
       return (<Redirect to={backUrl} />)
@@ -63,7 +75,8 @@ class CreateGroup extends Component {
             </label>
 
             Members
-            <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}/>  
+            <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
+                            id="create-group-members" possibleValues={possibleStudents}/>  
 
             <button type="submit">Create group</button><Link to={backUrl}>Cancel</Link>
             {

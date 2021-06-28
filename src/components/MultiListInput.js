@@ -1,7 +1,7 @@
 import './multi-list-input.css';
 import { useState } from 'react'
 
-const MultiListInput = ({ values, onValuesChange }) => {
+const MultiListInput = ({ id, values, onValuesChange, possibleValues }) => {
   const [ newValue, setNewValue ] = useState('')
 
   function handleInnerInputChange(e) {
@@ -46,6 +46,7 @@ const MultiListInput = ({ values, onValuesChange }) => {
         <input type="text" value={newValue}
             className="multi-list-input__input"
             onChange={handleInnerInputChange}
+            list={`${id}--datalist`}
             />
         <button type="button"
           className="multi-list-input__button"
@@ -53,6 +54,15 @@ const MultiListInput = ({ values, onValuesChange }) => {
             +
         </button>
       </div>
+      {
+        id && possibleValues
+          ? (
+          <datalist id={`${id}--datalist`}>
+            { possibleValues.map(value => (<option key={value} value={value}></option>)) }
+          </datalist>
+          )
+          : null
+      }
     </div>
   )
 
