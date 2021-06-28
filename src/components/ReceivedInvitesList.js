@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
+import Table from 'react-bootstrap/Table'
 
 const ReceivedInvitesList = ({ invites, onInvitesTouched }) => {
   const [ error, setError ] = useState(null)
@@ -23,37 +24,41 @@ const ReceivedInvitesList = ({ invites, onInvitesTouched }) => {
       {
         error ? <p>{error}</p> : null
       }
-      <table>
-        <tr>
-          <th>Email</th>
-          <th>State</th>
-          <th>For</th>
-          <th></th>
-        </tr>
-        {
-          invites.map(function(invite) {
-            let inviteFor = null
-            if(invite.roles && invite.roles.length > 0) {
-              inviteFor = invite.roles.join(", ")
-            } else if(invite.courseYear) {
-              const courseName = invite.courseYear.course?.name + " " + invite.courseYear.startYear 
-              inviteFor = courseName
-            }
-            return (
-              <tr key={invite.id}>
-                <td>{invite.email}</td>
-                <td>{invite.state}</td>
-                <td>{inviteFor}</td>
-                <td>
-                  <Button type="button" onClick={() => handleAcceptClick(invite.id)} variant="outline-secondary" size="sm">
-                    Accept
-                  </Button>
-                </td>
-              </tr>
-            )
-          })
-        }
-      </table>
+      <Table hover size="sm">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>State</th>
+            <th>For</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            invites.map(function(invite) {
+              let inviteFor = null
+              if(invite.roles && invite.roles.length > 0) {
+                inviteFor = invite.roles.join(", ")
+              } else if(invite.courseYear) {
+                const courseName = invite.courseYear.course?.name + " " + invite.courseYear.startYear 
+                inviteFor = courseName
+              }
+              return (
+                <tr key={invite.id}>
+                  <td>{invite.email}</td>
+                  <td>{invite.state}</td>
+                  <td>{inviteFor}</td>
+                  <td>
+                    <Button type="button" onClick={() => handleAcceptClick(invite.id)} variant="outline-secondary" size="sm">
+                      Accept
+                    </Button>
+                  </td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </Table>
     </div>
   )
 }

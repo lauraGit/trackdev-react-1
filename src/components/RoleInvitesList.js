@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
+import Table from 'react-bootstrap/Table'
 
 const RoleInvitesList = ({ invites, onInvitesTouched }) => {
   const [error, setError] = useState(null)
@@ -23,28 +24,32 @@ const RoleInvitesList = ({ invites, onInvitesTouched }) => {
       {
         error ? <p>{error}</p> : null
       }
-      <table>
-        <tr>
-          <th>Email</th>
-          <th>State</th>
-          <th>Roles</th>
-          <th></th>
-        </tr>
-        {
-          invites.map(invite => (
-            <tr key={invite.id}>
-              <td>{invite.email}</td>
-              <td>{invite.state}</td>
-              <td>{invite.roles ? invite.roles.join(", ") : null}</td>
-              <td>
-                <Button type="button" onClick={() => handleDeleteClick(invite.id)} variant="outline-secondary" size="sm">
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))
-        }
-      </table>
+      <Table hover size="sm">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>State</th>
+            <th>Roles</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            invites.map(invite => (
+              <tr key={invite.id}>
+                <td>{invite.email}</td>
+                <td>{invite.state}</td>
+                <td>{invite.roles ? invite.roles.join(", ") : null}</td>
+                <td>
+                  <Button type="button" onClick={() => handleDeleteClick(invite.id)} variant="outline-secondary" size="sm">
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </Table>
     </div>
   )
 }
