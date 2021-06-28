@@ -33,7 +33,7 @@ class LogoutButton extends Component {
                     Logout
                 </button>
                 {
-                    this.error ? (<p>{this.error}</p>) : null
+                    this.state.error ? (<p>{this.state.error}</p>) : null
                 }
             </Fragment>
         )
