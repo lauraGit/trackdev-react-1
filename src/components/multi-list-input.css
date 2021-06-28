@@ -1,0 +1,37 @@
+.multi-list-input__wrapper {
+  display: flex;
+  align-items: start;
+}
+
+.multi-list-input__chip {
+  border: 1px solid gray;
+  padding: 2px 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.multi-list-input__button {
+  background-color: transparent;
+  color: gray;
+  font-size: 10px;
+}
+
+.multi-list-input__button:hover {
+  background-color: transparent;
+  color: black;
+}
+
+.multi-list-input__chip .multi-list-input__button {
+  border: none;
+}
+
+.multi-list-input__input {
+  display: inline;
+}
+
+.multi-list-input__chips {
+  margin-bottom: 5px;
+}

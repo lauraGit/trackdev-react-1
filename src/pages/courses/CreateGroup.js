@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { withRouter } from "react-router"
 import { Link, Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
+import MultiListInput from '../../components/MultiListInput'
 import Api from '../../utils/api'
 
 class CreateGroup extends Component {
@@ -9,11 +10,13 @@ class CreateGroup extends Component {
     super(props)
     this.state = {
       name: '',
+      members: [],
       created: false,
       error: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleMultiListInputChange = this.handleMultiListInputChange.bind(this)
     this.courseYearId = this.props.match.params.courseYearId
   }
 
@@ -25,7 +28,8 @@ class CreateGroup extends Component {
 
   requestCreate() {
     var requestBody = {
-      name: this.state.name
+      name: this.state.name,
+      members: this.state.members
     }
     Api.post(`/courses/years/${this.courseYearId}/groups`, requestBody)
       .then(data => this.setState({ created: true }) )
@@ -36,6 +40,10 @@ class CreateGroup extends Component {
     let inputChange = {}
     inputChange[e.target.name] = e.target.value
     this.setState(inputChange)
+  }
+
+  handleMultiListInputChange(newValues) {
+    this.setState({ members: newValues })
   }
 
   render() {
@@ -52,7 +60,11 @@ class CreateGroup extends Component {
             <label>
               Name
               <input name="name" value={this.state.name} onChange={this.handleInputChange} required />
-            </label>    
+            </label>
+
+            Members
+            <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}/>  
+
             <button type="submit">Create group</button><Link to={backUrl}>Cancel</Link>
             {
               this.state.error ? (<p>{this.state.error}</p>) : null
