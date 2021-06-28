@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import MultiListInput from '../../components/MultiListInput'
 import Api from '../../utils/api'
+import Button from 'react-bootstrap/Button'
 
 class CreateGroup extends Component {
   constructor(props) {
@@ -78,7 +79,8 @@ class CreateGroup extends Component {
             <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
                             id="create-group-members" possibleValues={possibleStudents}/>  
 
-            <button type="submit">Create group</button><Link to={backUrl}>Cancel</Link>
+            <Button type="submit" variant="primary">Create group</Button>
+            <Link to={backUrl}>Cancel</Link>
             {
               this.state.error ? (<p>{this.state.error}</p>) : null
             }

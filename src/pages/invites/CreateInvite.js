@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import Restricted from "../../components/Restricted"
 import Api from '../../utils/api'
+import Button from 'react-bootstrap/Button'
 
 class CreateInvite extends Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class CreateInvite extends Component {
                   <option value="ADMIN">Admin</option>
               </select>
             </label>
-            <button type="submit">Invite</button>
+            <Button type="submit" variant="primary">Invite</Button>
             {
               this.state.error ? (<p>{this.state.error}</p>) : null
             }

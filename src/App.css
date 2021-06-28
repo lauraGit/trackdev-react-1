@@ -41,17 +41,3 @@ form > *:last-child {
 input, select {
   padding: 5px 10px;
 }
-
-button {
-  background-color: dimgrey;
-  border: 1px solid darkslategray;
-  padding: 5px 10px;
-  font-size: 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
-}
-
-button:hover {
-  background-color: darkslategray;
-}

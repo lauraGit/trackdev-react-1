@@ -1,5 +1,6 @@
 import './multi-list-input.css';
 import { useState } from 'react'
+import Button from 'react-bootstrap/Button'
 
 const MultiListInput = ({ id, values, onValuesChange, possibleValues }) => {
   const [ newValue, setNewValue ] = useState('')
@@ -48,11 +49,12 @@ const MultiListInput = ({ id, values, onValuesChange, possibleValues }) => {
             onChange={handleInnerInputChange}
             list={`${id}--datalist`}
             />
-        <button type="button"
+        <Button type="button"
           className="multi-list-input__button"
-          onClick={handleAddClick}>
+          onClick={handleAddClick}
+          variant="outline-primary">
             +
-        </button>
+        </Button>
       </div>
       {
         id && possibleValues

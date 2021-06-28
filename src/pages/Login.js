@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import UserContext from '../contexts/UserContext'
 import Api from '../utils/api'
+import Button from 'react-bootstrap/Button'
 
 class Login extends Component {
   constructor(props) {
@@ -60,7 +61,7 @@ class Login extends Component {
             Password
             <input name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required/>
           </label>
-          <button type="submit">Login</button>
+          <Button type="submit" variant="primary">Login</Button>
           {
             this.state.error ? (<p>{this.state.error}</p>) : null
           }

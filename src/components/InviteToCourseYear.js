@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Api from "../utils/api"
+import Button from 'react-bootstrap/Button'
 
 const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -40,7 +41,9 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
   if(mode === "normal") {
     return (
       <div>
-        <button type="button" onClick={handleNewClick}>Invite</button>
+        <Button type="button" onClick={handleNewClick} variant="primary">
+          Invite
+        </Button>
       </div>
     )
   }
@@ -53,8 +56,12 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
           Email
           <input name="email" value={email} required onChange={(e) => setEmail(e.target.value)} />  
         </label>
-        <button type="submit">Invite</button>
-        <button type="button" onClick={handleCancelClick}>Cancel</button>
+        <Button type="submit" variant="primary">
+          Invite
+        </Button>
+        <Button type="button" onClick={handleCancelClick} variant="outline-secondary">
+          Cancel
+        </Button>
         {
           errors.create ? (<p>{errors.create}</p>) : null
         }

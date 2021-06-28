@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import Api from '../../utils/api'
+import Button from 'react-bootstrap/Button'
 
 class CreateCourse extends Component {
   constructor(props) {
@@ -52,7 +53,8 @@ class CreateCourse extends Component {
               Name
               <input name="name" value={this.state.name} onChange={this.handleInputChange} required />
             </label>          
-            <button type="submit">Create course</button><Link to="/courses">Cancel</Link>
+            <Button type="submit" variant="primary">Create course</Button>
+            <Link to="/courses">Cancel</Link>
             {
               this.state.error ? (<p>{this.state.error}</p>) : null
             }

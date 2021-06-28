@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Api from "../utils/api"
+import Button from 'react-bootstrap/Button'
 
 const CourseInvitesList = ({ courseYearId, invites, onInvitesTouched }) => {
   const [ error, setError ] = useState(null)
@@ -33,7 +34,11 @@ const CourseInvitesList = ({ courseYearId, invites, onInvitesTouched }) => {
             <tr key={invite.id}>
               <td>{invite.email}</td>
               <td>{invite.state}</td>
-              <td><button type="button" onClick={() => handleDeleteClick(invite.id)}>Delete</button></td>
+              <td>
+                <Button type="button" onClick={() => handleDeleteClick(invite.id)} variant="outline-secondary" size="sm">
+                  Delete
+                </Button>
+              </td>
             </tr>
           ))
         }

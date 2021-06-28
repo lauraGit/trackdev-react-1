@@ -2,6 +2,7 @@ import './course-header-editable.css';
 import { Component } from "react"
 import { Redirect } from "react-router-dom"
 import Api from '../utils/api'
+import Button from 'react-bootstrap/Button'
 
 class CourseHeaderEditable extends Component {
   constructor(props) {
@@ -68,8 +69,12 @@ class CourseHeaderEditable extends Component {
         <div className="course-header-editable">
           <form onSubmit={this.handleSubmit} className="course-header-editable__content">
             <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange}/>
-            <button type="submit">Save</button>
-            <button type="button" onClick={this.handleCancelClick}>Cancel</button>          
+            <Button type="submit" variant="primary" size="sm">
+              Save
+            </Button>
+            <Button type="button" onClick={this.handleCancelClick} variant="outline-secondary" size="sm" >
+                Cancel
+            </Button>          
           </form>        
           <div className="course-header-editable__error">
           {
@@ -87,8 +92,12 @@ class CourseHeaderEditable extends Component {
         <div className="course-header-editable__content">
           <h2>{course.name}</h2>
           <div>
-            <button type="button" onClick={this.handleEditClick}>Edit</button>
-            <button type="button" onClick={this.handleDeleteClick}>Delete</button>
+            <Button type="submit" onClick={this.handleEditClick} variant="outline-primary" size="sm">
+              Edit
+            </Button>
+            <Button type="button" onClick={this.handleDeleteClick} variant="outline-secondary" size="sm">
+              Delete
+            </Button>
           </div>
         </div>
         <div className="course-header-editable__error">

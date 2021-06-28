@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Api from "../utils/api"
+import Button from 'react-bootstrap/Button'
 
 const CourseStudentsList = ({ courseYearId, students, onStudentsTouched }) => {
   const [ error, setError ] = useState(null)
@@ -31,7 +32,11 @@ const CourseStudentsList = ({ courseYearId, students, onStudentsTouched }) => {
           students.map(student => (
             <tr key={student.username}>
               <td>{student.username}</td>
-              <td><button type="button" onClick={() => handleDeleteClick(student.username)}>Delete</button></td>
+              <td>
+                <Button type="button" onClick={() => handleDeleteClick(student.username)} variant="outline-secondary" size="sm">
+                  Delete
+                </Button>
+              </td>
             </tr>
           ))
         }

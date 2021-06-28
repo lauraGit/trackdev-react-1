@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Api from '../utils/api'
+import Button from 'react-bootstrap/Button'
 
 class Register extends Component {
   constructor(props) {
@@ -63,7 +64,7 @@ class Register extends Component {
             Password
             <input name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required />
           </label>
-          <button type="submit">Register</button>
+          <Button type="submit" variant="primary">Register</Button>
           {
             this.state.error ? (<p>{this.error}</p>) : null
           }

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Api from "../utils/api"
+import Button from 'react-bootstrap/Button'
 
 const CreateCourseYear = (props) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -40,7 +41,9 @@ const CreateCourseYear = (props) => {
   if(mode === "normal") {
     return (
       <div>
-        <button type="button" onClick={handleNewClick}>New course year</button>
+        <Button type="button" onClick={handleNewClick} variant="primary">
+          New course year
+        </Button>
       </div>
     )
   }
@@ -53,8 +56,12 @@ const CreateCourseYear = (props) => {
           Start year
           <input name="startYear" value={startYear} required onChange={(e) => setStartYear(e.target.value)} />  
         </label>
-        <button type="submit">Create course year</button>
-        <button type="button" onClick={handleCancelClick}>Cancel</button>
+        <Button type="submit" variant="primary">
+          Create course year
+        </Button>
+        <Button type="button" onClick={handleCancelClick} variant="outline-secondary">
+          Cancel
+        </Button>
         {
           errors.create ? (<p>{errors.create}</p>) : null
         }
