@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import Api from '../../utils/api'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 class CreateCourse extends Component {
   constructor(props) {
@@ -48,17 +49,18 @@ class CreateCourse extends Component {
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-course">
           <h2>New course</h2>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Name
-              <input name="name" value={this.state.name} onChange={this.handleInputChange} required />
-            </label>          
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Group controlId="create-course-name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control name="name" value={this.state.name} onChange={this.handleInputChange} required />
+            </Form.Group>
+            
             <Button type="submit" variant="primary">Create course</Button>
             <Link to="/courses">Cancel</Link>
             {
               this.state.error ? (<p>{this.state.error}</p>) : null
             }
-          </form>
+          </Form>
         </div>
       </Restricted>
     )

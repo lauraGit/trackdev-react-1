@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import UserContext from '../contexts/UserContext'
 import Api from '../utils/api'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 class Login extends Component {
   constructor(props) {
@@ -52,21 +53,24 @@ class Login extends Component {
     return (
       <div className="login">
         <h2>Login</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Username
-            <input name="username" value={this.state.username} onChange={this.handleInputChange} required />
-          </label>
-          <label>
-            Password
-            <input name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required/>
-          </label>
+        <Form onSubmit={this.handleSubmit}>
+
+          <Form.Group controlId="login-username">
+            <Form.Label>Username</Form.Label>
+            <Form.Control name="username" value={this.state.username} onChange={this.handleInputChange} required />
+          </Form.Group>
+
+          <Form.Group controlId="login-password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required />
+          </Form.Group>
+
           <Button type="submit" variant="primary">Login</Button>
           {
             this.state.error ? (<p>{this.state.error}</p>) : null
           }
           <p>Don't have an account yet? Go to <Link to="/register">register</Link>.</p>
-        </form>
+        </Form>
       </div>
     )
   }

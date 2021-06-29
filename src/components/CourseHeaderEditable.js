@@ -1,8 +1,9 @@
-import './course-header-editable.css';
 import { Component } from "react"
 import { Redirect } from "react-router-dom"
 import Api from '../utils/api'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
 
 class CourseHeaderEditable extends Component {
   constructor(props) {
@@ -66,17 +67,27 @@ class CourseHeaderEditable extends Component {
     const course = this.props.course
     if(this.state.mode === "edit") {
       return (
-        <div className="course-header-editable">
-          <form onSubmit={this.handleSubmit} className="course-header-editable__content">
-            <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange}/>
-            <Button type="submit" variant="primary" size="sm">
-              Save
-            </Button>
-            <Button type="button" onClick={this.handleCancelClick} variant="outline-secondary" size="sm" >
-                Cancel
-            </Button>          
-          </form>        
-          <div className="course-header-editable__error">
+        <div>
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Row className="align-items-center">
+              <Col>
+                <Form.Label htmlFor="course-header-editable-name" srOnly>Name</Form.Label>
+                <Form.Control id="course-header-editable-name"
+                    type="text" name="name" value={this.state.name} onChange={this.handleInputChange} />
+              </Col>
+              <Col xs="auto">
+                <Button type="submit" variant="primary" size="sm">
+                  Save
+                </Button>
+              </Col>
+              <Col xs="auto">
+                <Button type="button" onClick={this.handleCancelClick} variant="outline-secondary" size="sm" >
+                    Cancel
+                </Button>
+              </Col>
+            </Form.Row>
+          </Form>
+          <div>
           {
               this.state.errors.edit ? (<p>{this.state.errors.edit}</p>) : null
           }
@@ -88,19 +99,21 @@ class CourseHeaderEditable extends Component {
       return (<Redirect to="/courses" />)
     }
     return (
-      <div className="course-header-editable">
-        <div className="course-header-editable__content">
-          <h2>{course.name}</h2>
-          <div>
+      <div>
+        <Form.Row>
+          <Col><h2>{course.name}</h2></Col>
+          <Col xs="auto">
             <Button type="submit" onClick={this.handleEditClick} variant="outline-primary" size="sm">
               Edit
             </Button>
+          </Col>
+          <Col xs="auto">
             <Button type="button" onClick={this.handleDeleteClick} variant="outline-secondary" size="sm">
               Delete
             </Button>
-          </div>
-        </div>
-        <div className="course-header-editable__error">
+          </Col>
+        </Form.Row>
+        <div>
           {
             this.state.errors.delete ? (<p>{this.state.errors.delete}</p>) : null
           }

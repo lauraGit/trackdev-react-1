@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Api from '../utils/api'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 class Register extends Component {
   constructor(props) {
@@ -51,25 +52,28 @@ class Register extends Component {
     return (
       <div className="register">
         <h2>Register</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Username
-            <input name="username" value={this.state.username} onChange={this.handleInputChange} required />
-          </label>
-          <label>
-            Email
-            <input name="email" value={this.state.email} onChange={this.handleInputChange} required />
-          </label>
-          <label>
-            Password
-            <input name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required />
-          </label>
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Group controlId="register-username">
+            <Form.Label>Username</Form.Label>
+            <Form.Control name="username" value={this.state.username} onChange={this.handleInputChange} required />
+          </Form.Group>
+          
+          <Form.Group controlId="register-email">
+            <Form.Label>Email</Form.Label>
+            <Form.Control name="email" value={this.state.email} onChange={this.handleInputChange} required />
+          </Form.Group>
+
+          <Form.Group controlId="register-password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required /> 
+          </Form.Group>
+
           <Button type="submit" variant="primary">Register</Button>
           {
             this.state.error ? (<p>{this.error}</p>) : null
           }
           <p>Already have an account? Go to <Link to="/login">login</Link>.</p>
-        </form>
+        </Form>
       </div>
     )
   }

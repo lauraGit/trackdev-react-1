@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 const CreateCourseYear = (props) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -51,11 +52,12 @@ const CreateCourseYear = (props) => {
   return (
     <div>
       <h4>New course year</h4>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Start year
-          <input name="startYear" value={startYear} required onChange={(e) => setStartYear(e.target.value)} />  
-        </label>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="create-course-year-start-year">
+          <Form.Label>Start year</Form.Label>
+          <Form.Control name="startYear" value={startYear} onChange={(e) => setStartYear(e.target.value)} required />
+        </Form.Group>
+
         <Button type="submit" variant="primary">
           Create course year
         </Button>
@@ -65,7 +67,7 @@ const CreateCourseYear = (props) => {
         {
           errors.create ? (<p>{errors.create}</p>) : null
         }
-      </form>
+      </Form>
     </div>
   )
 }

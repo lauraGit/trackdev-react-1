@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -51,11 +52,12 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
   return (
     <div>
       <h4>Invite to course year</h4>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
-          <input name="email" value={email} required onChange={(e) => setEmail(e.target.value)} />  
-        </label>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="invite-to-course-email">
+          <Form.Label>Email</Form.Label>
+          <Form.Control name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        </Form.Group>
+
         <Button type="submit" variant="primary">
           Invite
         </Button>
@@ -65,7 +67,7 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
         {
           errors.create ? (<p>{errors.create}</p>) : null
         }
-      </form>
+      </Form>
     </div>
   )
 }

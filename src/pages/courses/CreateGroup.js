@@ -5,6 +5,7 @@ import Restricted from '../../components/Restricted'
 import MultiListInput from '../../components/MultiListInput'
 import Api from '../../utils/api'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 class CreateGroup extends Component {
   constructor(props) {
@@ -69,22 +70,24 @@ class CreateGroup extends Component {
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-group">
           <h2>New group</h2>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Name
-              <input name="name" value={this.state.name} onChange={this.handleInputChange} required />
-            </label>
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Group controlId="create-group-name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control name="name" value={this.state.name} onChange={this.handleInputChange} required />
+            </Form.Group>
 
-            Members
-            <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
-                            id="create-group-members" possibleValues={possibleStudents}/>  
+            <Form.Group>
+              <Form.Label htmlFor="create-group-name-new-member">Members</Form.Label>
+              <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
+                            id="create-group-name-new-member" possibleValues={possibleStudents}/>  
+            </Form.Group>
 
             <Button type="submit" variant="primary">Create group</Button>
             <Link to={backUrl}>Cancel</Link>
             {
               this.state.error ? (<p>{this.state.error}</p>) : null
             }
-          </form>
+          </Form>
         </div>
       </Restricted>
     )

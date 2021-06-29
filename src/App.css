@@ -19,25 +19,3 @@ body {
 .create-group {
   max-width: 600px;
 }
-
-form input,
-form select {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-form label {
-  display: block;
-}
-
-form > * {
-  margin-bottom: 14px;
-}
-
-form > *:last-child {
-  margin-bottom: 0;
-}
-
-input, select {
-  padding: 5px 10px;
-}
