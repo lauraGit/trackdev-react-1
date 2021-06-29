@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import './App.css';
 import { BrowserRouter as Router } from 'react-router-dom'
 import UserContext from './contexts/UserContext'
 import Header from './components/Header'

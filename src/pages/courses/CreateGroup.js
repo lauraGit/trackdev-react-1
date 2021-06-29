@@ -6,6 +6,7 @@ import MultiListInput from '../../components/MultiListInput'
 import Api from '../../utils/api'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
 
 class CreateGroup extends Component {
   constructor(props) {
@@ -15,7 +16,8 @@ class CreateGroup extends Component {
       members: [],
       created: false,
       error: '',
-      students: []
+      students: [],
+      validated: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -35,7 +37,11 @@ class CreateGroup extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.setState({ error: ''})
-    this.requestCreate()
+    const isValidForm = e.currentTarget.checkValidity()
+    this.setState( {validated: true})
+    if(isValidForm === true) {
+      this.requestCreate()
+    }
   }
 
   requestCreate() {
@@ -70,10 +76,13 @@ class CreateGroup extends Component {
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-group">
           <h2>New group</h2>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
             <Form.Group controlId="create-group-name">
               <Form.Label>Name</Form.Label>
               <Form.Control name="name" value={this.state.name} onChange={this.handleInputChange} required />
+              <Form.Control.Feedback type="invalid">
+                Please enter a valid name.
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group>
@@ -85,7 +94,7 @@ class CreateGroup extends Component {
             <Button type="submit" variant="primary">Create group</Button>
             <Link to={backUrl}>Cancel</Link>
             {
-              this.state.error ? (<p>{this.state.error}</p>) : null
+              this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }
           </Form>
         </div>

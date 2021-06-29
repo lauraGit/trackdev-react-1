@@ -2,15 +2,21 @@ import { useState } from "react"
 import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
 
 const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
   const [mode, setMode] = useState("normal") // normal/create
   const [errors, setErrors] = useState({})
   const [email, setEmail] = useState("")
+  const [validated, setValidated] = useState(false)
 
   function handleSubmit(e) {
     e.preventDefault();
-    requestCreate();
+    const isValidForm = e.currentTarget.checkValidity()
+    setValidated(true)
+    if(isValidForm === true) {
+      requestCreate()
+    }
   }
 
   function handleNewClick() {
@@ -36,6 +42,7 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
     setMode("normal")
     setEmail("")
     setErrors({})
+    setValidated(false)
   }
 
   // Render
@@ -52,10 +59,13 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
   return (
     <div>
       <h4>Invite to course year</h4>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate validated={validated}>
         <Form.Group controlId="invite-to-course-email">
           <Form.Label>Email</Form.Label>
-          <Form.Control name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <Form.Control name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <Form.Control.Feedback type="invalid">
+              Please enter a valid email.
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Button type="submit" variant="primary">
@@ -65,7 +75,7 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
           Cancel
         </Button>
         {
-          errors.create ? (<p>{errors.create}</p>) : null
+          errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
         }
       </Form>
     </div>

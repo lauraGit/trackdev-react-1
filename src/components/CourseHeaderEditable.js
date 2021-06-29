@@ -4,6 +4,7 @@ import Api from '../utils/api'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert'
 
 class CourseHeaderEditable extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class CourseHeaderEditable extends Component {
     this.state = {
       name: this.props.course.name,
       errors: {},
-      mode: "normal" // normal, edit, deleted
+      mode: "normal", // normal, edit, deleted
+      validated: false
     }
     this.handleEditClick = this.handleEditClick.bind(this)
     this.handleCancelClick = this.handleCancelClick.bind(this)
@@ -30,7 +32,11 @@ class CourseHeaderEditable extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.requestEditCourseDetails()
+    const isValidForm = e.currentTarget.checkValidity()
+    this.setState( {validated: true})
+    if(isValidForm === true) {
+      this.requestEditCourseDetails()
+    }
   }
 
   requestEditCourseDetails() {
@@ -68,12 +74,15 @@ class CourseHeaderEditable extends Component {
     if(this.state.mode === "edit") {
       return (
         <div>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
             <Form.Row className="align-items-center">
               <Col>
                 <Form.Label htmlFor="course-header-editable-name" srOnly>Name</Form.Label>
                 <Form.Control id="course-header-editable-name"
-                    type="text" name="name" value={this.state.name} onChange={this.handleInputChange} />
+                    type="text" name="name" value={this.state.name} onChange={this.handleInputChange} required />
+                <Form.Control.Feedback type="invalid">
+                  Please enter a valid name.
+                </Form.Control.Feedback>
               </Col>
               <Col xs="auto">
                 <Button type="submit" variant="primary" size="sm">
@@ -86,12 +95,12 @@ class CourseHeaderEditable extends Component {
                 </Button>
               </Col>
             </Form.Row>
+            <div>
+            {
+                this.state.errors.edit ? (<Alert variant="danger">{this.state.errors.edit}</Alert>) : null
+            }
+            </div>
           </Form>
-          <div>
-          {
-              this.state.errors.edit ? (<p>{this.state.errors.edit}</p>) : null
-          }
-          </div>
         </div>        
       )
     }

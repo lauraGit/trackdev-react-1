@@ -21,6 +21,7 @@
 @import "../node_modules/bootstrap/scss/forms";
 
 // Components
+@import "../node_modules/bootstrap/scss/alert";
 @import "../node_modules/bootstrap/scss/buttons";
 @import "../node_modules/bootstrap/scss/nav";
 
@@ -33,3 +34,4 @@
 // -----------------------------------
 // Styles for new and custom TrackDev components are placed next to the .js with
 // the React component with a .scss file with the same name.
+@import "./App.scss"

@@ -4,6 +4,7 @@ import UserContext from '../contexts/UserContext'
 import Api from '../utils/api'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
 
 class Login extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      error: null
+      error: null,
+      validated: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -19,8 +21,11 @@ class Login extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({ hasApiError: false, errorMessage: ''})
-    this.requestLogin()
+    const isValidForm = e.currentTarget.checkValidity()
+    this.setState( {validated: true})
+    if(isValidForm === true) {
+      this.requestLogin()
+    }
   }
 
   requestLogin() {
@@ -53,21 +58,27 @@ class Login extends Component {
     return (
       <div className="login">
         <h2>Login</h2>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
 
           <Form.Group controlId="login-username">
             <Form.Label>Username</Form.Label>
             <Form.Control name="username" value={this.state.username} onChange={this.handleInputChange} required />
+            <Form.Control.Feedback type="invalid">
+              Please enter a username.
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="login-password">
             <Form.Label>Password</Form.Label>
             <Form.Control name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required />
+            <Form.Control.Feedback type="invalid">
+              Please enter a password.
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Button type="submit" variant="primary">Login</Button>
           {
-            this.state.error ? (<p>{this.state.error}</p>) : null
+            this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
           }
           <p>Don't have an account yet? Go to <Link to="/register">register</Link>.</p>
         </Form>
