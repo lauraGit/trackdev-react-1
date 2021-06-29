@@ -102,7 +102,7 @@ const CourseYear = (props) => {
   return (
     <div>
       <h2>Course Year</h2>
-      <Tabs defaultActiveKey="groups">
+      <Tabs defaultActiveKey="groups" transition={false}>
         { groupsTab }
         { isProfessor ? studentsTab : null }
         { isProfessor ? invitesTab : null }
