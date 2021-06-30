@@ -1,4 +1,4 @@
-import { useContext, Fragment } from "react"
+import { useContext, useState, useEffect, Fragment } from "react"
 import { useParams } from "react-router"
 import { Link } from "react-router-dom"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
@@ -36,7 +36,21 @@ const Invites = withData(
 
 const CourseYear = (props) => {
   let { courseYearId } = useParams()
+  const [ courseYear, setCourseYear ] = useState(null)
+  const [ hasError, setHasError ] = useState(null)
+  const [ isLoading, setIsLoading ] = useState(true)
   const { user } = useContext(UserContext)
+
+  useEffect(() => {
+    requestCourseYear()
+  }, [])
+
+  function requestCourseYear() {
+    Api.get(`/courses/years/${courseYearId}`)
+      .then(data => setCourseYear(data))
+      .catch(error => setHasError(true))
+      .finally(() => setIsLoading(false))
+  }
 
   const groupsTab = (
     <Tab eventKey="groups" title="Groups">
@@ -67,9 +81,16 @@ const CourseYear = (props) => {
 
   const isProfessor = user?.profile?.roles && user.profile.roles.some(r => r === "PROFESSOR")
 
+  // Render
+  if(isLoading) {
+    return null
+  }
+  if(hasError || courseYear === null) {
+    return (<p>Error retrieving course.</p>)
+  }
   return (
     <div>
-      <h2>Course Year</h2>
+      <h2>{courseYear.course?.name} {courseYear.startYear}</h2>
       <Tabs defaultActiveKey="groups" transition={false}>
         { groupsTab }
         { isProfessor ? studentsTab : null }
