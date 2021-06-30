@@ -5,6 +5,7 @@ import Course from './courses/Course'
 import CreateGroup from './courses/CreateGroup'
 import CourseYear from './courses/CourseYear'
 import CreateCourse from './courses/CreateCourse'
+import CourseYears from './courses/CourseYears'
 import NotFoundPage from './shared/NotFoundPage'
 
 const CoursesRoutes = () => {
@@ -19,6 +20,9 @@ const CoursesRoutes = () => {
         </Route>
         <Route exact path="/courses/years/:courseYearId">
           <CourseYear />
+        </Route>
+        <Route exact path="/courses/years">
+          <CourseYears />
         </Route>
         <Route exact path="/courses/:courseId">
           <Course />

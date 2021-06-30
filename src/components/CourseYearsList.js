@@ -1,16 +1,24 @@
 import { Link } from "react-router-dom"
 
-const CourseYearsList = (props) => {
-  const courseYears = props.courseYears
+const CourseYearsList = ({ courseYears }) => {
+  if(courseYears == null) {
+    return null
+  }
   return (
     <div>
       <ul>
         {
-          courseYears.map(courseYear => (
-            <li key={courseYear.id}>
-              <Link to={`/courses/years/${courseYear.id}`}>{courseYear.startYear}</Link>
-            </li>
-          ))
+          courseYears.map(courseYear => {
+            let courseYearName = courseYear.startYear
+            if(courseYear.course) {
+              courseYearName = courseYear.course.name + " " + courseYearName
+            }
+            return (
+              <li key={courseYear.id}>
+                <Link to={`/courses/years/${courseYear.id}`}>{courseYearName}</Link>
+              </li>
+            )
+          })
         }
       </ul>
     </div>
