@@ -18,9 +18,11 @@ const HeaderLinks = () => {
         <nav>
           <Link to="/invites">Invites</Link>
           <Restricted allowed={["PROFESSOR", "ADMIN"]}>
-            <Link to="/courses">All courses</Link>
+            <Link to="/courses">Courses</Link>
           </Restricted>
-          <Link to="/courses/years">Courses</Link>
+          <Restricted allowed={["STUDENT"]}>
+            <Link to="/courses/years">Courses</Link>
+          </Restricted>
         </nav>
         <div>
             <span>{user.profile?.username}</span>
