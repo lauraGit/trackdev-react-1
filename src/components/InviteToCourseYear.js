@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
 
-const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
+const InviteToCourseYear = ( { courseYearId, onDataTouched } ) => {
   const [mode, setMode] = useState("normal") // normal/create
   const [errors, setErrors] = useState({})
   const [email, setEmail] = useState("")
@@ -32,7 +32,7 @@ const InviteToCourseYear = ( { courseYearId, onInvitesTouched } ) => {
       email: email
     })
     .then(data => {  
-      onInvitesTouched()
+      onDataTouched()
       resetState()
     })
     .catch(error => setErrors({ create: error?.details?.message || 'Unknown error' }))

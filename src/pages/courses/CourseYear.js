@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, Fragment } from "react"
 import { useParams } from "react-router"
 import { Link } from "react-router-dom"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
@@ -10,64 +10,33 @@ import Api from "../../utils/api"
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import UserContext from "../../contexts/UserContext"
+import withData from "../../components/withData"
+
+const Groups = withData(
+  CourseGroupsList,
+  'groups',
+  (props) => Api.get(`/courses/years/${props.courseYearId}/groups`))
+
+const Students = withData(
+  CourseStudentsList,
+  'students',
+  (props) => Api.get(`/courses/years/${props.courseYearId}/students`))
+
+const Invites = withData(
+  ({courseYearId, invites, onDataTouched}) => {
+    return (
+      <Fragment>
+          <InviteToCourseYear courseYearId={courseYearId} onDataTouched={onDataTouched} />
+          <CourseInvitesList courseYearId={courseYearId} invites={invites} onDataTouched={onDataTouched} />
+      </Fragment>
+    )
+  },
+  'invites',
+  (props) => Api.get(`/invites?type=courseYear&courseYearId=${props.courseYearId}`))
 
 const CourseYear = (props) => {
   let { courseYearId } = useParams()
-  const [ isLoading, setIsLoading ] = useState(true)
-  const [ hasError, setHasError] = useState(false)
-  const [ invites, setInvites ] = useState(null)
-  const [ students, setStudents ] = useState(null)
-  const [ groups, setGroups ] = useState(null)
   const { user } = useContext(UserContext)
- 
-  useEffect(() => {
-    requestInvites()
-    requestStudents()
-    requestGroups()
-  }, [])
-
-  function requestInvites() {
-    Api.get(`/invites?type=courseYear&courseYearId=${courseYearId}`)
-      .then(data => setInvites(data))
-      .catch(error => setHasError(true))
-      .finally(() => setIsLoading(false))
-  }
-
-  function requestStudents() {
-    Api.get(`/courses/years/${courseYearId}/students`)
-      .then(data => setStudents(data))
-      .catch(error => setHasError(true))
-      .finally(() => setIsLoading(false))
-  }
-
-  function requestGroups() {
-    Api.get(`/courses/years/${courseYearId}/groups`)
-      .then(data => setGroups(data))
-      .catch(error => setHasError(true))
-      .finally(() => setIsLoading(false))
-  }
-
-  function handleInvitesTouched() {
-    requestInvites()
-  }
-
-  function handleStudentsTouched() {
-    requestStudents()
-  }
-
-  function handleGroupsTouched() {
-    requestGroups()
-  }
-
-
-  // Render
-  if(isLoading) {
-    return <p>Loading...</p>
-  }
-
-  if(hasError) {
-    return <p>Error retrieving data.</p>
-  }
 
   const groupsTab = (
     <Tab eventKey="groups" title="Groups">
@@ -75,7 +44,7 @@ const CourseYear = (props) => {
         <Restricted allowed={["PROFESSOR"]}>
           <Link to={`/courses/years/${courseYearId}/groups/create`}>New group</Link>
         </Restricted>
-        <CourseGroupsList courseYearId={courseYearId} groups={groups} onGroupsTouched={handleGroupsTouched} />
+        <Groups courseYearId={courseYearId} />
       </div>
     </Tab>
   )
@@ -83,7 +52,7 @@ const CourseYear = (props) => {
   const studentsTab = (
     <Tab eventKey="students" title="Students">
       <div>
-        <CourseStudentsList courseYearId={courseYearId} students={students} onStudentsTouched={handleStudentsTouched} />
+        <Students courseYearId={courseYearId} />
       </div>
     </Tab>
   )
@@ -91,8 +60,7 @@ const CourseYear = (props) => {
   const invitesTab = (
     <Tab eventKey="invites" title="Invites">
       <div>
-        <InviteToCourseYear courseYearId={courseYearId} onInvitesTouched={handleInvitesTouched} />
-        <CourseInvitesList courseYearId={courseYearId} invites={invites} onInvitesTouched={handleInvitesTouched} />
+        <Invites courseYearId={courseYearId} />
       </div>
     </Tab>
   )
