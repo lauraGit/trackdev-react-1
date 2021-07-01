@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { Link } from "react-router-dom"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
@@ -7,6 +7,9 @@ import CourseStudentsList from "../../components/CourseStudentsList"
 import CourseGroupsList from "../../components/CourseGroupsList"
 import Restricted from '../../components/Restricted'
 import Api from "../../utils/api"
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
+import UserContext from "../../contexts/UserContext"
 
 const CourseYear = (props) => {
   let { courseYearId } = useParams()
@@ -15,7 +18,8 @@ const CourseYear = (props) => {
   const [ invites, setInvites ] = useState(null)
   const [ students, setStudents ] = useState(null)
   const [ groups, setGroups ] = useState(null)
-
+  const { user } = useContext(UserContext)
+ 
   useEffect(() => {
     requestInvites()
     requestStudents()
@@ -55,6 +59,8 @@ const CourseYear = (props) => {
     requestGroups()
   }
 
+
+  // Render
   if(isLoading) {
     return <p>Loading...</p>
   }
@@ -63,29 +69,44 @@ const CourseYear = (props) => {
     return <p>Error retrieving data.</p>
   }
 
-  return (
-    <div>
-      <h2>Course Year</h2>
+  const groupsTab = (
+    <Tab eventKey="groups" title="Groups">
       <div>
-        <h3>Groups</h3>
         <Restricted allowed={["PROFESSOR"]}>
           <Link to={`/courses/years/${courseYearId}/groups/create`}>New group</Link>
         </Restricted>
         <CourseGroupsList courseYearId={courseYearId} groups={groups} onGroupsTouched={handleGroupsTouched} />
       </div>
-      <Restricted allowed={["PROFESSOR"]}>
-        <div>
-          <h3>Students</h3>
-          <CourseStudentsList courseYearId={courseYearId} students={students} onStudentsTouched={handleStudentsTouched} />
-        </div>  
-      </Restricted>
-      <Restricted allowed={["PROFESSOR"]}>
-        <div>
-          <h3>Invites</h3>
-          <InviteToCourseYear courseYearId={courseYearId} onInvitesTouched={handleInvitesTouched} />
-          <CourseInvitesList courseYearId={courseYearId} invites={invites} onInvitesTouched={handleInvitesTouched} />
-        </div>  
-      </Restricted>
+    </Tab>
+  )
+
+  const studentsTab = (
+    <Tab eventKey="students" title="Students">
+      <div>
+        <CourseStudentsList courseYearId={courseYearId} students={students} onStudentsTouched={handleStudentsTouched} />
+      </div>
+    </Tab>
+  )
+
+  const invitesTab = (
+    <Tab eventKey="invites" title="Invites">
+      <div>
+        <InviteToCourseYear courseYearId={courseYearId} onInvitesTouched={handleInvitesTouched} />
+        <CourseInvitesList courseYearId={courseYearId} invites={invites} onInvitesTouched={handleInvitesTouched} />
+      </div>
+    </Tab>
+  )
+
+  const isProfessor = user?.profile?.roles && user.profile.roles.some(r => r === "PROFESSOR")
+
+  return (
+    <div>
+      <h2>Course Year</h2>
+      <Tabs defaultActiveKey="groups" transition={false}>
+        { groupsTab }
+        { isProfessor ? studentsTab : null }
+        { isProfessor ? invitesTab : null }
+      </Tabs>
     </div>
   )
 }

@@ -1,6 +1,9 @@
 import { Component } from 'react'
 import Restricted from "../../components/Restricted"
 import Api from '../../utils/api'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
 
 class CreateInvite extends Component {
   constructor(props) {
@@ -9,7 +12,8 @@ class CreateInvite extends Component {
       email: '',
       roles: [],
       created: false,
-      error: ''
+      error: '',
+      validated: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -19,7 +23,11 @@ class CreateInvite extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.setState({ error: ''})
-    this.requestCreateInvite()
+    const isValidForm = e.currentTarget.checkValidity()
+    this.setState( {validated: true})
+    if(isValidForm === true) {
+      this.requestCreateInvite()
+    }
   }
 
   requestCreateInvite() {
@@ -57,25 +65,32 @@ class CreateInvite extends Component {
       <Restricted allowed={["PROFESSOR", "ADMIN"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-invite">
           <h2>Invite</h2>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Email
-              <input name="email" value={this.state.email} onChange={this.handleInputChange} required />
-            </label>
-            <label>
-              Role
-              <select name="roles" value={this.state.roles} onChange={this.handleMultipleSelectChange} multiple={true} required>
+          <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
+            <Form.Group controlId="create-invite-email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control name="email" type="email" value={this.state.email} onChange={this.handleInputChange} required />
+              <Form.Control.Feedback type="invalid">
+                Please enter a valid email.
+              </Form.Control.Feedback>
+            </Form.Group>
+            
+            <Form.Group controlId="create-invite-roles">
+              <Form.Label>Roles</Form.Label>
+              <Form.Control as="select" name="roles" value={this.state.roles} onChange={this.handleMultipleSelectChange} multiple required>
                   <option value="" disabled>Not selected</option>
                   <option value="STUDENT">Student</option>
                   <option value="PROFESSOR">Professor</option>
                   <option value="ADMIN">Admin</option>
-              </select>
-            </label>
-            <button type="submit">Invite</button>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                  Please select some roles.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Button type="submit" variant="primary">Invite</Button>
             {
-              this.state.error ? (<p>{this.state.error}</p>) : null
+              this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }
-          </form>
+          </Form>
         </div>
       </Restricted>
     )

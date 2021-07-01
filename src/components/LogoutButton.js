@@ -1,6 +1,7 @@
 import { Component, Fragment } from 'react'
 import UserContext from '../contexts/UserContext'
 import Api from '../utils/api'
+import Button from 'react-bootstrap/Button'
 
 class LogoutButton extends Component {
 
@@ -29,9 +30,9 @@ class LogoutButton extends Component {
     render() {
         return (
             <Fragment>
-                <button onClick={this.handleClick}>
+                <Button onClick={this.handleClick} variant="link">
                     Logout
-                </button>
+                </Button>
                 {
                     this.state.error ? (<p>{this.state.error}</p>) : null
                 }

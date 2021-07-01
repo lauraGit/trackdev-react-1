@@ -1,7 +1,10 @@
-import './course-header-editable.css';
 import { Component } from "react"
 import { Redirect } from "react-router-dom"
 import Api from '../utils/api'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert'
 
 class CourseHeaderEditable extends Component {
   constructor(props) {
@@ -9,7 +12,8 @@ class CourseHeaderEditable extends Component {
     this.state = {
       name: this.props.course.name,
       errors: {},
-      mode: "normal" // normal, edit, deleted
+      mode: "normal", // normal, edit, deleted
+      validated: false
     }
     this.handleEditClick = this.handleEditClick.bind(this)
     this.handleCancelClick = this.handleCancelClick.bind(this)
@@ -28,7 +32,11 @@ class CourseHeaderEditable extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.requestEditCourseDetails()
+    const isValidForm = e.currentTarget.checkValidity()
+    this.setState( {validated: true})
+    if(isValidForm === true) {
+      this.requestEditCourseDetails()
+    }
   }
 
   requestEditCourseDetails() {
@@ -65,17 +73,34 @@ class CourseHeaderEditable extends Component {
     const course = this.props.course
     if(this.state.mode === "edit") {
       return (
-        <div className="course-header-editable">
-          <form onSubmit={this.handleSubmit} className="course-header-editable__content">
-            <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange}/>
-            <button type="submit">Save</button>
-            <button type="button" onClick={this.handleCancelClick}>Cancel</button>          
-          </form>        
-          <div className="course-header-editable__error">
-          {
-              this.state.errors.edit ? (<p>{this.state.errors.edit}</p>) : null
-          }
-          </div>
+        <div>
+          <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
+            <Form.Row className="align-items-center">
+              <Col>
+                <Form.Label htmlFor="course-header-editable-name" srOnly>Name</Form.Label>
+                <Form.Control id="course-header-editable-name"
+                    type="text" name="name" value={this.state.name} onChange={this.handleInputChange} required />
+                <Form.Control.Feedback type="invalid">
+                  Please enter a valid name.
+                </Form.Control.Feedback>
+              </Col>
+              <Col xs="auto">
+                <Button type="submit" variant="primary" size="sm">
+                  Save
+                </Button>
+              </Col>
+              <Col xs="auto">
+                <Button type="button" onClick={this.handleCancelClick} variant="outline-secondary" size="sm" >
+                    Cancel
+                </Button>
+              </Col>
+            </Form.Row>
+            <div>
+            {
+                this.state.errors.edit ? (<Alert variant="danger">{this.state.errors.edit}</Alert>) : null
+            }
+            </div>
+          </Form>
         </div>        
       )
     }
@@ -83,15 +108,21 @@ class CourseHeaderEditable extends Component {
       return (<Redirect to="/courses" />)
     }
     return (
-      <div className="course-header-editable">
-        <div className="course-header-editable__content">
-          <h2>{course.name}</h2>
-          <div>
-            <button type="button" onClick={this.handleEditClick}>Edit</button>
-            <button type="button" onClick={this.handleDeleteClick}>Delete</button>
-          </div>
-        </div>
-        <div className="course-header-editable__error">
+      <div>
+        <Form.Row>
+          <Col><h2>{course.name}</h2></Col>
+          <Col xs="auto">
+            <Button type="submit" onClick={this.handleEditClick} variant="outline-primary" size="sm">
+              Edit
+            </Button>
+          </Col>
+          <Col xs="auto">
+            <Button type="button" onClick={this.handleDeleteClick} variant="outline-secondary" size="sm">
+              Delete
+            </Button>
+          </Col>
+        </Form.Row>
+        <div>
           {
             this.state.errors.delete ? (<p>{this.state.errors.delete}</p>) : null
           }

@@ -1,5 +1,7 @@
 import { useState } from "react"
 import Api from "../utils/api"
+import Button from 'react-bootstrap/Button'
+import Table from 'react-bootstrap/Table'
 
 const CourseStudentsList = ({ courseYearId, students, onStudentsTouched }) => {
   const [ error, setError ] = useState(null)
@@ -22,20 +24,28 @@ const CourseStudentsList = ({ courseYearId, students, onStudentsTouched }) => {
       {
         error ? <p>{error}</p> : null
       }
-      <table>
-        <tr>
-          <th>Username</th>
-          <th></th>
-        </tr>
-        {
-          students.map(student => (
-            <tr key={student.username}>
-              <td>{student.username}</td>
-              <td><button type="button" onClick={() => handleDeleteClick(student.username)}>Delete</button></td>
-            </tr>
-          ))
-        }
-      </table>
+      <Table hover size="sm">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            students.map(student => (
+              <tr key={student.username}>
+                <td>{student.username}</td>
+                <td>
+                  <Button type="button" onClick={() => handleDeleteClick(student.username)} variant="outline-secondary" size="sm">
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </Table>
     </div>
   )
 }

@@ -13,20 +13,19 @@
   margin-bottom: 5px;
 }
 
-.multi-list-input__button {
+.multi-list-input__chip .multi-list-input__button {
   background-color: transparent;
   color: gray;
   font-size: 10px;
+  padding: 5px 10px;
+  border: none;
 }
 
-.multi-list-input__button:hover {
+.multi-list-input__chip .multi-list-input__button:hover {
   background-color: transparent;
   color: black;
 }
 
-.multi-list-input__chip .multi-list-input__button {
-  border: none;
-}
 
 .multi-list-input__input {
   display: inline;

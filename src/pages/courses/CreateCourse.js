@@ -2,6 +2,9 @@ import { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import Api from '../../utils/api'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
 
 class CreateCourse extends Component {
   constructor(props) {
@@ -10,7 +13,8 @@ class CreateCourse extends Component {
       name: '',
       created: false,
       error: '',
-      courseId: 0
+      courseId: 0,
+      validated: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -18,8 +22,11 @@ class CreateCourse extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({ error: ''})
-    this.requestCreate()
+    const isValidForm = e.currentTarget.checkValidity()
+    this.setState( {validated: true})
+    if(isValidForm === true) {
+      this.requestCreate()
+    }
   }
 
   requestCreate() {
@@ -47,16 +54,21 @@ class CreateCourse extends Component {
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-course">
           <h2>New course</h2>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Name
-              <input name="name" value={this.state.name} onChange={this.handleInputChange} required />
-            </label>          
-            <button type="submit">Create course</button><Link to="/courses">Cancel</Link>
+          <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
+            <Form.Group controlId="create-course-name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control name="name" value={this.state.name} onChange={this.handleInputChange} required />
+              <Form.Control.Feedback type="invalid">
+                Please enter a valid name.
+              </Form.Control.Feedback>
+            </Form.Group>
+            
+            <Button type="submit" variant="primary">Create course</Button>
+            <Link to="/courses">Cancel</Link>
             {
-              this.state.error ? (<p>{this.state.error}</p>) : null
+              this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }
-          </form>
+          </Form>
         </div>
       </Restricted>
     )

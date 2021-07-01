@@ -4,6 +4,9 @@ import { Link, Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import MultiListInput from '../../components/MultiListInput'
 import Api from '../../utils/api'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
 
 class CreateGroup extends Component {
   constructor(props) {
@@ -13,7 +16,8 @@ class CreateGroup extends Component {
       members: [],
       created: false,
       error: '',
-      students: []
+      students: [],
+      validated: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -33,7 +37,11 @@ class CreateGroup extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.setState({ error: ''})
-    this.requestCreate()
+    const isValidForm = e.currentTarget.checkValidity()
+    this.setState( {validated: true})
+    if(isValidForm === true) {
+      this.requestCreate()
+    }
   }
 
   requestCreate() {
@@ -68,21 +76,27 @@ class CreateGroup extends Component {
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-group">
           <h2>New group</h2>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Name
-              <input name="name" value={this.state.name} onChange={this.handleInputChange} required />
-            </label>
+          <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
+            <Form.Group controlId="create-group-name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control name="name" value={this.state.name} onChange={this.handleInputChange} required />
+              <Form.Control.Feedback type="invalid">
+                Please enter a valid name.
+              </Form.Control.Feedback>
+            </Form.Group>
 
-            Members
-            <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
-                            id="create-group-members" possibleValues={possibleStudents}/>  
+            <Form.Group>
+              <Form.Label htmlFor="create-group-name-new-member">Members</Form.Label>
+              <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
+                            id="create-group-name-new-member" possibleValues={possibleStudents}/>  
+            </Form.Group>
 
-            <button type="submit">Create group</button><Link to={backUrl}>Cancel</Link>
+            <Button type="submit" variant="primary">Create group</Button>
+            <Link to={backUrl}>Cancel</Link>
             {
-              this.state.error ? (<p>{this.state.error}</p>) : null
+              this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }
-          </form>
+          </Form>
         </div>
       </Restricted>
     )
