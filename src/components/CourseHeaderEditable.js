@@ -27,7 +27,7 @@ class CourseHeaderEditable extends Component {
   }
 
   handleCancelClick() {
-    this.setState({mode: "normal"})
+    this.setState({mode: "normal", error: null, validated: false})
   }
 
   handleSubmit(e) {
@@ -46,7 +46,7 @@ class CourseHeaderEditable extends Component {
     Api.put('/courses/' + this.props.course.id, requestBody)
       .then(data => {        
         this.props.onCourseChange(data)
-        this.setState({mode: "normal", errors: {}})        
+        this.setState({mode: "normal", errors: {}, validated: false})        
       })
       .catch(error => {
         this.setState({ errors: { edit: error?.details?.message || 'Unknown error' }})

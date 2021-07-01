@@ -55,7 +55,7 @@ const MultiListInput = ({ id, values, onValuesChange, possibleValues }) => {
           className="multi-list-input__button"
           onClick={handleAddClick}
           variant="outline-primary">
-            +
+            Add
         </Button>
       </div>
       {
