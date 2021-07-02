@@ -1,14 +1,17 @@
 import { useContext, useState, useEffect, Fragment } from "react"
 import { useParams } from "react-router"
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
 import CourseInvitesList from "../../components/CourseInvitesList"
 import CourseStudentsList from "../../components/CourseStudentsList"
 import CourseGroupsList from "../../components/CourseGroupsList"
 import Restricted from '../../components/Restricted'
+import ConfirmationModal from "../../components/ConfirmationModal"
 import Api from "../../utils/api"
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
+import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
 import UserContext from "../../contexts/UserContext"
 import withData from "../../components/withData"
 
@@ -39,6 +42,9 @@ const CourseYear = (props) => {
   const [ courseYear, setCourseYear ] = useState(null)
   const [ hasError, setHasError ] = useState(null)
   const [ isLoading, setIsLoading ] = useState(true)
+  const [ askConfirmDelete, setAskConfirmDelete ] = useState(false)
+  const [ deleted, setDeleted ] = useState(false)
+  const [error, setError] = useState(null)
   const { user } = useContext(UserContext)
 
   useEffect(() => {
@@ -50,6 +56,22 @@ const CourseYear = (props) => {
       .then(data => setCourseYear(data))
       .catch(error => setHasError(true))
       .finally(() => setIsLoading(false))
+  }
+
+  function handleDeleteClick() {
+    setAskConfirmDelete(true)
+  }
+
+  function handleActualDelete() {
+    Api.delete(`/courses/years/${courseYearId}`)
+      .then(() => {
+        setAskConfirmDelete(false)
+        setDeleted(true)
+      })
+      .catch(error => {
+        setAskConfirmDelete(false)
+        setError(error?.details?.message || 'Unknown error') 
+      })
   }
 
   const groupsTab = (
@@ -88,14 +110,31 @@ const CourseYear = (props) => {
   if(hasError || courseYear === null) {
     return (<p>Error retrieving course.</p>)
   }
+  if(deleted) {
+    return (<Redirect to={`/courses/${courseYear.course.id}`} />)
+  }
   return (
     <div>
       <h2>{courseYear.course?.name} {courseYear.startYear}</h2>
+      {
+        error ? <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert> : null
+      }
+      <Restricted allowed={["PROFESSOR"]}>
+        <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
+      </Restricted>
       <Tabs defaultActiveKey="groups" transition={false}>
         { groupsTab }
         { isProfessor ? studentsTab : null }
         { isProfessor ? invitesTab : null }
       </Tabs>
+      <ConfirmationModal show={askConfirmDelete}
+          title="Sure you want to delete this course year?"
+          onCancel={() => setAskConfirmDelete(false)}
+          onConfirm={handleActualDelete}
+          >
+        <p>Please keep in mind that when a course year is deleted all its groups, invites, backlogs and tasks are deleted as well.</p>
+        <p>You cannot recover from this action.</p>
+      </ConfirmationModal>
     </div>
   )
 }
