@@ -23,7 +23,7 @@ function App() {
         setUser(user)
       })
       .catch((error) => {
-        if(error.status === 403) {
+        if(error.status === 403 || error.status === 404) {
           const user = { isLoggedIn: false, profile: null }
           setUser(user)
         }
