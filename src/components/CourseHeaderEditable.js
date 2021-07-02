@@ -20,6 +20,7 @@ class CourseHeaderEditable extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleDeleteClick = this.handleDeleteClick.bind(this)
+    this.handleDismissAlert = this.handleDismissAlert.bind(this)
   }
 
   handleEditClick() {
@@ -67,6 +68,10 @@ class CourseHeaderEditable extends Component {
       .catch(error => {
         this.setState({ errors: { delete: error?.details?.message || 'Unknown error' }})
       })
+  }
+
+  handleDismissAlert() {
+    this.setState({ errors: {}})
   }
 
   render() {
@@ -124,7 +129,13 @@ class CourseHeaderEditable extends Component {
         </Form.Row>
         <div>
           {
-            this.state.errors.delete ? (<p>{this.state.errors.delete}</p>) : null
+            this.state.errors.delete
+              ? (
+                <Alert variant="danger" dismissible onClose={this.handleDismissAlert}>
+                  {this.state.errors.delete}
+                </Alert>
+                )
+              : null
           }
         </div>      
       </div>
