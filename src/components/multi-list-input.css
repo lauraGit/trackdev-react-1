@@ -28,7 +28,7 @@
 
 
 .multi-list-input__input {
-  display: inline;
+  margin-right: 8px;
 }
 
 .multi-list-input__chips {

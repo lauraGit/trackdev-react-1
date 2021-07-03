@@ -4,6 +4,7 @@ import Api from '../../utils/api'
 import CourseHeaderEditable from "../../components/CourseHeaderEditable"
 import CourseYearsList from "../../components/CourseYearsList"
 import CreateCourseYear from "../../components/CreateCourseYear"
+import Restricted from '../../components/Restricted'
 
 class Course extends Component {
   constructor(props) {
@@ -52,14 +53,16 @@ class Course extends Component {
     }
     const course = this.state.course
     return (
-      <div>              
-        <CourseHeaderEditable
-          course={course}
-          onCourseChange={this.handleCourseChange} />
-        <h3>Course years</h3>
-        <CreateCourseYear courseId={course.id} onCourseTouched={this.handleCourseTouched} />
-        <CourseYearsList courseId={course.id} courseYears={course.courseYears} />
-      </div>
+      <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
+        <div>              
+          <CourseHeaderEditable
+            course={course}
+            onCourseChange={this.handleCourseChange} />
+          <h3>Course years</h3>
+          <CreateCourseYear courseId={course.id} onCourseTouched={this.handleCourseTouched} />
+          <CourseYearsList courseId={course.id} courseYears={course.courseYears} />
+        </div>
+      </Restricted>
     )
   }
 }

@@ -3,12 +3,12 @@ import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
 
-const CourseStudentsList = ({ courseYearId, students, onStudentsTouched }) => {
+const CourseStudentsList = ({ courseYearId, students, onDataTouched }) => {
   const [ error, setError ] = useState(null)
 
   function handleDeleteClick(username) {
     Api.delete(`/courses/years/${courseYearId}/students/${username}`)
-      .then(data =>  onStudentsTouched())
+      .then(data =>  onDataTouched())
       .catch(error => setError(error?.details?.message || 'Unknown error') )
   }
 

@@ -1,4 +1,5 @@
 import './course-groups-list.css';
+import GroupCard from './GroupCard'
 
 const CourseGroupsList = ({ groups }) => {
   // Render
@@ -13,16 +14,7 @@ const CourseGroupsList = ({ groups }) => {
         {
           groups.map(group => (
             <div key={group.id}>
-              <div className="group-card">
-                <strong>{group.name}</strong>
-                <div>
-                  {
-                    group.members?.map(member => 
-                      (<span key={member.username}>@{member.username}</span>)
-                      )
-                  }
-                </div>
-              </div>
+              <GroupCard group={group} />
             </div>
           ))
         }

@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './Home'
 import Login from './Login'
 import Register from './Register'
+import GroupsRoutes from './GroupsRoutes'
 import InvitesRoutes from './InvitesRoutes'
 import CoursesRoutes from './CoursesRoutes'
 import NotFoundPage from './shared/NotFoundPage'
@@ -17,6 +18,11 @@ const MainRoutes = () => {
         </Route>
         <Route exact path="/register">
           <Register />
+        </Route>
+        <Route path="/groups">
+          <EnsureLoggedIn>
+            <GroupsRoutes />
+          </EnsureLoggedIn>
         </Route>
         <Route path="/invites">
           <EnsureLoggedIn>

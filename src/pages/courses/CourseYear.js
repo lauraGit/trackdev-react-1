@@ -1,72 +1,77 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState, useEffect, Fragment } from "react"
 import { useParams } from "react-router"
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
 import CourseInvitesList from "../../components/CourseInvitesList"
 import CourseStudentsList from "../../components/CourseStudentsList"
 import CourseGroupsList from "../../components/CourseGroupsList"
 import Restricted from '../../components/Restricted'
+import ConfirmationModal from "../../components/ConfirmationModal"
 import Api from "../../utils/api"
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
+import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
 import UserContext from "../../contexts/UserContext"
+import withData from "../../components/withData"
+
+const Groups = withData(
+  CourseGroupsList,
+  'groups',
+  (props) => Api.get(`/courses/years/${props.courseYearId}/groups`))
+
+const Students = withData(
+  CourseStudentsList,
+  'students',
+  (props) => Api.get(`/courses/years/${props.courseYearId}/students`))
+
+const Invites = withData(
+  ({courseYearId, invites, onDataTouched}) => {
+    return (
+      <Fragment>
+          <InviteToCourseYear courseYearId={courseYearId} onDataTouched={onDataTouched} />
+          <CourseInvitesList courseYearId={courseYearId} invites={invites} onDataTouched={onDataTouched} />
+      </Fragment>
+    )
+  },
+  'invites',
+  (props) => Api.get(`/invites?type=courseYear&courseYearId=${props.courseYearId}`))
 
 const CourseYear = (props) => {
   let { courseYearId } = useParams()
+  const [ courseYear, setCourseYear ] = useState(null)
+  const [ hasError, setHasError ] = useState(null)
   const [ isLoading, setIsLoading ] = useState(true)
-  const [ hasError, setHasError] = useState(false)
-  const [ invites, setInvites ] = useState(null)
-  const [ students, setStudents ] = useState(null)
-  const [ groups, setGroups ] = useState(null)
+  const [ askConfirmDelete, setAskConfirmDelete ] = useState(false)
+  const [ deleted, setDeleted ] = useState(false)
+  const [error, setError] = useState(null)
   const { user } = useContext(UserContext)
- 
+
   useEffect(() => {
-    requestInvites()
-    requestStudents()
-    requestGroups()
+    requestCourseYear()
   }, [])
 
-  function requestInvites() {
-    Api.get(`/invites?type=courseYear&courseYearId=${courseYearId}`)
-      .then(data => setInvites(data))
+  function requestCourseYear() {
+    Api.get(`/courses/years/${courseYearId}`)
+      .then(data => setCourseYear(data))
       .catch(error => setHasError(true))
       .finally(() => setIsLoading(false))
   }
 
-  function requestStudents() {
-    Api.get(`/courses/years/${courseYearId}/students`)
-      .then(data => setStudents(data))
-      .catch(error => setHasError(true))
-      .finally(() => setIsLoading(false))
+  function handleDeleteClick() {
+    setAskConfirmDelete(true)
   }
 
-  function requestGroups() {
-    Api.get(`/courses/years/${courseYearId}/groups`)
-      .then(data => setGroups(data))
-      .catch(error => setHasError(true))
-      .finally(() => setIsLoading(false))
-  }
-
-  function handleInvitesTouched() {
-    requestInvites()
-  }
-
-  function handleStudentsTouched() {
-    requestStudents()
-  }
-
-  function handleGroupsTouched() {
-    requestGroups()
-  }
-
-
-  // Render
-  if(isLoading) {
-    return <p>Loading...</p>
-  }
-
-  if(hasError) {
-    return <p>Error retrieving data.</p>
+  function handleActualDelete() {
+    Api.delete(`/courses/years/${courseYearId}`)
+      .then(() => {
+        setAskConfirmDelete(false)
+        setDeleted(true)
+      })
+      .catch(error => {
+        setAskConfirmDelete(false)
+        setError(error?.details?.message || 'Unknown error') 
+      })
   }
 
   const groupsTab = (
@@ -75,7 +80,7 @@ const CourseYear = (props) => {
         <Restricted allowed={["PROFESSOR"]}>
           <Link to={`/courses/years/${courseYearId}/groups/create`}>New group</Link>
         </Restricted>
-        <CourseGroupsList courseYearId={courseYearId} groups={groups} onGroupsTouched={handleGroupsTouched} />
+        <Groups courseYearId={courseYearId} />
       </div>
     </Tab>
   )
@@ -83,7 +88,7 @@ const CourseYear = (props) => {
   const studentsTab = (
     <Tab eventKey="students" title="Students">
       <div>
-        <CourseStudentsList courseYearId={courseYearId} students={students} onStudentsTouched={handleStudentsTouched} />
+        <Students courseYearId={courseYearId} />
       </div>
     </Tab>
   )
@@ -91,22 +96,45 @@ const CourseYear = (props) => {
   const invitesTab = (
     <Tab eventKey="invites" title="Invites">
       <div>
-        <InviteToCourseYear courseYearId={courseYearId} onInvitesTouched={handleInvitesTouched} />
-        <CourseInvitesList courseYearId={courseYearId} invites={invites} onInvitesTouched={handleInvitesTouched} />
+        <Invites courseYearId={courseYearId} />
       </div>
     </Tab>
   )
 
   const isProfessor = user?.profile?.roles && user.profile.roles.some(r => r === "PROFESSOR")
 
+  // Render
+  if(isLoading) {
+    return null
+  }
+  if(hasError || courseYear === null) {
+    return (<p>Error retrieving course.</p>)
+  }
+  if(deleted) {
+    return (<Redirect to={`/courses/${courseYear.course.id}`} />)
+  }
   return (
     <div>
-      <h2>Course Year</h2>
+      <h2>{courseYear.course?.name} {courseYear.startYear}</h2>
+      {
+        error ? <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert> : null
+      }
+      <Restricted allowed={["PROFESSOR"]}>
+        <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
+      </Restricted>
       <Tabs defaultActiveKey="groups" transition={false}>
         { groupsTab }
         { isProfessor ? studentsTab : null }
         { isProfessor ? invitesTab : null }
       </Tabs>
+      <ConfirmationModal show={askConfirmDelete}
+          title="Sure you want to delete this course year?"
+          onCancel={() => setAskConfirmDelete(false)}
+          onConfirm={handleActualDelete}
+          >
+        <p>Please keep in mind that when a course year is deleted all its groups, invites, backlogs and tasks are deleted as well.</p>
+        <p>You cannot recover from this action.</p>
+      </ConfirmationModal>
     </div>
   )
 }
