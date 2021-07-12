@@ -1,0 +1,8 @@
+.backlog-task-item {
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+.backlog-task-item + .backlog-task-item {
+  border-top: none;
+}

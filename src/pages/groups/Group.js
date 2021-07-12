@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, Redirect, withRouter } from 'react-router-dom'
 import withData from '../../components/withData'
 import UsersList from '../../components/UsersList'
+import Backlogs from '../../components/Backlogs'
 import Restricted from '../../components/Restricted'
 import ConfirmationModal from '../../components/ConfirmationModal'
 import Api from '../../utils/api'
@@ -54,6 +55,9 @@ const Group = ({ group }) => {
         error ? <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert> : null
       }
       <p>Members <UsersList users={group.members} /></p>
+
+      <Backlogs backlogs={group.backlogs} />
+      
       <ConfirmationModal show={askConfirmDelete}
           title="Sure you want to delete this group?"
           onCancel={() => setAskConfirmDelete(false)}

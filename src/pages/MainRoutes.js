@@ -6,6 +6,7 @@ import Register from './Register'
 import GroupsRoutes from './GroupsRoutes'
 import InvitesRoutes from './InvitesRoutes'
 import CoursesRoutes from './CoursesRoutes'
+import Task from './Task'
 import NotFoundPage from './shared/NotFoundPage'
 import EnsureLoggedIn from '../components/EnsureLoggedIn'
 
@@ -32,6 +33,11 @@ const MainRoutes = () => {
         <Route path="/courses">
           <EnsureLoggedIn>
             <CoursesRoutes />
+          </EnsureLoggedIn>
+        </Route>
+        <Route exact path="/tasks/:taskId">
+          <EnsureLoggedIn>
+            <Task />
           </EnsureLoggedIn>
         </Route>
         <Route exact path="/">
