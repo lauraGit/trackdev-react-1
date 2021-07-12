@@ -43,6 +43,7 @@ class EditGroup extends Component {
   requestStudents() {
     Api.get(`/courses/years/${this.props.group.courseYear.id}/students`)
       .then(data => this.setState({ students: data}))
+      .catch(error => {})
   }
 
   handleSubmit(e) {

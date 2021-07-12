@@ -1,3 +1,4 @@
+import './course-year.css'
 import { useContext, useState, useEffect, Fragment } from "react"
 import { useParams } from "react-router"
 import { Link, Redirect } from "react-router-dom"
@@ -12,6 +13,8 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
 import UserContext from "../../contexts/UserContext"
 import withData from "../../components/withData"
 
@@ -76,7 +79,7 @@ const CourseYear = (props) => {
 
   const groupsTab = (
     <Tab eventKey="groups" title="Groups">
-      <div>
+      <div className="course-year-tab">
         <Restricted allowed={["PROFESSOR"]}>
           <Link to={`/courses/years/${courseYearId}/groups/create`}>New group</Link>
         </Restricted>
@@ -87,7 +90,7 @@ const CourseYear = (props) => {
 
   const studentsTab = (
     <Tab eventKey="students" title="Students">
-      <div>
+      <div className="course-year-tab">
         <Students courseYearId={courseYearId} />
       </div>
     </Tab>
@@ -95,7 +98,7 @@ const CourseYear = (props) => {
 
   const invitesTab = (
     <Tab eventKey="invites" title="Invites">
-      <div>
+      <div className="course-year-tab">
         <Invites courseYearId={courseYearId} />
       </div>
     </Tab>
@@ -113,15 +116,20 @@ const CourseYear = (props) => {
   if(deleted) {
     return (<Redirect to={`/courses/${courseYear.course.id}`} />)
   }
+  const fullName = courseYear.course?.name + " " + courseYear.startYear
   return (
     <div>
-      <h2>{courseYear.course?.name} {courseYear.startYear}</h2>
+      <Restricted allowed={["PROFESSOR"]} fallback={(<h2>{fullName}</h2>)}>
+        <Form.Row>
+          <Col><h2>{fullName}</h2></Col>
+          <Col xs="auto">
+            <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
+          </Col>
+        </Form.Row>
+      </Restricted>
       {
         error ? <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert> : null
       }
-      <Restricted allowed={["PROFESSOR"]}>
-        <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
-      </Restricted>
       <Tabs defaultActiveKey="groups" transition={false}>
         { groupsTab }
         { isProfessor ? studentsTab : null }

@@ -7,6 +7,8 @@ import ConfirmationModal from '../../components/ConfirmationModal'
 import Api from '../../utils/api'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
 
 const Group = ({ group }) => {
   const [error, setError] = useState(null)
@@ -37,16 +39,21 @@ const Group = ({ group }) => {
   }
   return (
     <div>
-      <h2>{group.name}</h2>
+      <Restricted allowed={["PROFESSOR"]} fallback={(<h2>{group.name}</h2>)}>
+        <Form.Row>
+          <Col><h2>{group.name}</h2></Col>
+          <Col xs="auto">
+            <Link to={`/groups/${group.id}/edit`}>Edit group</Link>
+          </Col>
+          <Col xs="auto">
+            <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
+          </Col>
+        </Form.Row>
+      </Restricted>
       {
         error ? <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert> : null
       }
-      <p>Members</p>
-      <UsersList users={group.members} />
-      <Restricted allowed={["PROFESSOR"]} >
-        <Link to={`/groups/${group.id}/edit`}>Edit group</Link>
-        <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
-      </Restricted>
+      <p>Members <UsersList users={group.members} /></p>
       <ConfirmationModal show={askConfirmDelete}
           title="Sure you want to delete this group?"
           onCancel={() => setAskConfirmDelete(false)}
