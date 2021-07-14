@@ -14,6 +14,12 @@ const withData = (WrappedComponent, propName, getData) => {
       this.updateWithData()
     }
 
+    componentDidUpdate(prevProps) {
+      if(this.props !== prevProps) {
+        this.updateWithData()
+      }
+    }
+
     handleDataTouched() {
       this.updateWithData()
     }

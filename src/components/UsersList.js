@@ -2,11 +2,11 @@ import './user-list.css'
 
 const UsersList = ( { users }) => {
   return (
-    <div className="user-list">
+    <span className="user-list">
       {
-        users?.map(user => (<div key={user.username} className="user-mention">{user.username}</div>) )
+        users?.map(user => (<span key={user.username} className="user-mention">{user.username}</span>) )
       }
-    </div>
+    </span>
   )
 }
 
