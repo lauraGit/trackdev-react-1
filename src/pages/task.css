@@ -1,0 +1,19 @@
+@media (min-width: 768px) {
+  .task-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .task-header > * {
+    margin-right: 5px;
+  }
+  
+  .task-header > *:last-child {
+    margin-right: 0;
+  }
+  
+  .task-header__name {
+    flex-grow: 1;
+  }
+}
+

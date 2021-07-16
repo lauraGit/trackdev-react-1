@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert'
+import EditableHeader from "./EditableHeader"
 
 class CourseHeaderEditable extends Component {
   constructor(props) {
@@ -16,36 +17,21 @@ class CourseHeaderEditable extends Component {
       mode: "normal", // normal, edit, deleted
       validated: false
     }
-    this.handleEditClick = this.handleEditClick.bind(this)
-    this.handleCancelClick = this.handleCancelClick.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handleNameEditing = this.handleNameEditing.bind(this)
     this.handleDeleteClick = this.handleDeleteClick.bind(this)
     this.handleDismissAlert = this.handleDismissAlert.bind(this)
     this.handleCancelDelete = this.handleCancelDelete.bind(this)
     this.handleActualDelete = this.handleActualDelete.bind(this)
   }
 
-  handleEditClick() {
-    this.setState({mode: "edit"})
+  handleNameEditing(isEditing) {
+    this.setState({ mode: isEditing ? 'edit' : 'normal'})
   }
 
-  handleCancelClick() {
-    this.setState({mode: "normal", error: null, validated: false})
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    const isValidForm = e.currentTarget.checkValidity()
-    this.setState( {validated: true})
-    if(isValidForm === true) {
-      this.requestEditCourseDetails()
-    }
-  }
-
-  requestEditCourseDetails() {
+  handleNameChange(newName) {
     var requestBody = {
-      name: this.state.name
+      name: newName
     }
     Api.put('/courses/' + this.props.course.id, requestBody)
       .then(data => {        
@@ -55,12 +41,6 @@ class CourseHeaderEditable extends Component {
       .catch(error => {
         this.setState({ errors: { edit: error?.details?.message || 'Unknown error' }})
       })
-  }
-
-  handleInputChange(e) {
-    let inputChange = {}
-    inputChange[e.target.name] = e.target.value
-    this.setState(inputChange)
   }
 
   handleActualDelete() {
@@ -87,50 +67,22 @@ class CourseHeaderEditable extends Component {
 
   render() {
     const course = this.props.course
-    if(this.state.mode === "edit") {
-      return (
-        <div>
-          <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
-            <Form.Row className="align-items-center">
-              <Col>
-                <Form.Label htmlFor="course-header-editable-name" srOnly>Name</Form.Label>
-                <Form.Control id="course-header-editable-name"
-                    type="text" name="name" value={this.state.name} onChange={this.handleInputChange} required />
-                <Form.Control.Feedback type="invalid">
-                  Please enter a valid name.
-                </Form.Control.Feedback>
-              </Col>
-              <Col xs="auto">
-                <Button type="submit" variant="primary" size="sm">
-                  Save
-                </Button>
-              </Col>
-              <Col xs="auto">
-                <Button type="button" onClick={this.handleCancelClick} variant="outline-secondary" size="sm" >
-                    Cancel
-                </Button>
-              </Col>
-            </Form.Row>
-            <div>
-            {
-                this.state.errors.edit ? (<Alert variant="danger">{this.state.errors.edit}</Alert>) : null
-            }
-            </div>
-          </Form>
-        </div>        
-      )
-    }
     if(this.state.mode === "deleted") {
       return (<Redirect to="/courses" />)
     }
     return (
       <div>
-        <Form.Row>
-          <Col><h2>{course.name}</h2></Col>
-          <Col xs="auto">
-            <Button type="submit" onClick={this.handleEditClick} variant="outline-primary" size="sm">
-              Edit
-            </Button>
+        <Form.Row className="align-items-center">
+          <Col>
+            <EditableHeader
+              title={course.name}              
+              isEditing={this.state.mode === 'edit'}
+              error={this.state.errors?.edit}
+              fieldLabel="Name"
+              fieldValidationMessage="Please enter a valid name"
+              onEditing={this.handleNameEditing}
+              onChange={this.handleNameChange}
+             />
           </Col>
           <Col xs="auto">
             <Button type="button" onClick={this.handleDeleteClick} variant="outline-secondary" size="sm">
