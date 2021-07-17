@@ -1,0 +1,18 @@
+.editable-field {
+  position: relative;
+}
+
+.editable-field .editable-field__dialog {
+  left: 0;
+  z-index: 10;
+  background-color: white;
+  position: absolute;
+  border: 1px solid silver;
+  display: block;
+  padding: 10px;
+  min-width: 300px;
+}
+
+.editable-field .editable-field__buttons > * {
+  margin-right: 10px;
+}
