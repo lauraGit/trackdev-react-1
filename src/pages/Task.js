@@ -1,5 +1,5 @@
 import './task.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { withRouter } from "react-router"
 import { Link } from 'react-router-dom'
 import UserMention from '../components/UserMention'
@@ -14,14 +14,24 @@ import TaskTimeline from '../components/TaskTimeline'
 const Task = ( { task, onDataTouched }) => {
   const [ errors, setErrors ] = useState({})
 
-  // name
   const [ isEditing, setIsEditing ] = useState(false)
-
   const [ estimationEditStatus, setEstimationEditStatus ] = useState({ status: 'normal', error: null})
   const [ statusEditStatus, setStatusEditStatus ] = useState({ status: 'normal', error: null})
   const [ assigneeEditStatus, setAssigneeEditStatus ] = useState({ status: 'normal', error: null})
 
   const statusOptions = [ "TODO", "INPROGRESS", "DONE", "TESTED", "SPRINT", "DELETED", "CREATED" ]
+  const [ possibleAssignees, setPossibleAssignees ] = useState([])
+
+  useEffect(function() {
+    async function requestGroupMembers() {
+      Api.get(`/groups/${task.backlog.group.id}`)
+        .then(data => setPossibleAssignees(data.members))
+        .catch(() => {})
+    }
+    if(task?.backlog?.group?.id) {
+      requestGroupMembers()
+    }    
+  }, [task])
 
   // NAME EDIT
   // --------------------------------------------------------------
@@ -118,10 +128,17 @@ const Task = ( { task, onDataTouched }) => {
         <div>
           Assignee: <EditableField
             fieldView={ task.assignee ? <UserMention user={task.assignee} /> : '-' }
+            as="select"
             status={assigneeEditStatus.status}
             error={assigneeEditStatus.error}
             value={task.assignee?.username}
-            onChange={handleAssigneeChange} />
+            onChange={handleAssigneeChange}>
+              {
+                possibleAssignees
+                  .map(user => user.username)
+                  .map(option => (<option key={option} value={option}>{option}</option>))
+              }
+            </EditableField>
         </div>
         <div>
           Estimation: <EditableField
