@@ -9,6 +9,7 @@ import Api from '../utils/api'
 import EstimationPoints from "../components/EstimationPoints"
 import EditableField from '../components/EditableField'
 import EditableHeader from "../components/EditableHeader"
+import TaskTimeline from '../components/TaskTimeline'
 
 const Task = ( { task, onDataTouched }) => {
   const [ errors, setErrors ] = useState({})
@@ -144,7 +145,11 @@ const Task = ( { task, onDataTouched }) => {
               }
             </EditableField>
         </div>
-      </div>      
+      </div>
+      <div>
+        <h3>History</h3>
+        <TaskTimeline taskId={task.id} />
+      </div>   
     </div>
   ) 
 }
