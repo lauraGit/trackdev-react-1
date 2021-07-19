@@ -1,8 +1,4 @@
-.user-list .user-mention {
+.user-list > * {
   display: inline-block;
   margin-right: 5px;
-}
-
-.user-mention::before {
-  content: '@';
 }

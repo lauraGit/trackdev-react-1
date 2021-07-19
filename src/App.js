@@ -4,6 +4,7 @@ import UserContext from './contexts/UserContext'
 import Header from './components/Header'
 import Main from './components/Main'
 import MainRoutes from './pages/MainRoutes'
+import Container from 'react-bootstrap/Container'
 import Api from './utils/api'
 
 function App() {
@@ -34,10 +35,12 @@ function App() {
     <UserContext.Provider value={{user: user, setUser: setUser}}>
       <Router>
         <div className="app">
-          <Header />
-          <Main>
-            <MainRoutes />
-          </Main>   
+          <Container fluid="lg">
+            <Header />
+            <Main>
+              <MainRoutes />
+            </Main>
+          </Container>
         </div>
       </Router>
     </UserContext.Provider>

@@ -1,0 +1,27 @@
+.editable-header {
+  display: flex;
+  align-items: center;
+}
+
+.editable-header__title {
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.editable-header .editable-header__btn {
+  visibility: hidden;
+}
+
+.editable-header:hover .editable-header__btn {
+  visibility: visible;
+}
+
+.editable-header > form {
+  flex-grow: 2;
+}
+
+@media (min-width: 768px) {
+  .editable-header > form {
+    max-width: 80%;
+  }
+}
