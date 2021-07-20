@@ -1,0 +1,7 @@
+.task-timeline .task-timeline__text {
+  color: grey;
+}
+
+.task-timeline .task-timeline__icon {
+  margin-right: 5px;
+}
