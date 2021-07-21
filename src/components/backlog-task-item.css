@@ -6,3 +6,13 @@
 .backlog-task-item + .backlog-task-item {
   border-top: none;
 }
+
+.backlog-task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.backlog-task-item__menu-form {
+  padding: 5px 15px;
+}

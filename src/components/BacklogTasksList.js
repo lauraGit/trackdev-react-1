@@ -4,6 +4,7 @@ import withData from './withData'
 import Api from '../utils/api'
 
 const BacklogTasksList = ({ backlog, tasks, onDataTouched }) => {
+
   if(!tasks) {
     return null
   }
@@ -15,7 +16,7 @@ const BacklogTasksList = ({ backlog, tasks, onDataTouched }) => {
           tasks.length == 0
             ? (<p>You don't have any tasks yet.</p>)
             : tasks.map(task => (
-                <BacklogTaskItem key={task.id} task={task} />
+                <BacklogTaskItem key={task.id} task={task} onDataTouched={onDataTouched} totalCount={tasks.length} />
               ))
         }
       </div>

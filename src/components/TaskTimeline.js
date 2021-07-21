@@ -25,6 +25,9 @@ const TaskTimeline = ({ changes }) => {
       case "estimation_points_change":
         value = '🃏'
         break;
+      case "rank_change":
+        value = '🥈'
+        break;
     }
 
     return value
@@ -45,6 +48,9 @@ const TaskTimeline = ({ changes }) => {
       case "estimation_points_change":
         value = 'estimation points'
         break;
+      case "rank_change":
+        value = 'rank'
+        break;
     }
 
     return value
@@ -64,6 +70,9 @@ const TaskTimeline = ({ changes }) => {
         break;
       case "estimation_points_change":
         value = change.estimationPoints ? (<EstimationPoints estimationPoints={change.estimationPoints} />) : '-'
+        break;
+      case "rank_change":
+        value = change.rank ? (<em>#{change.rank}</em>) : '-'
         break;
     }
 
