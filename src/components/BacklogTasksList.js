@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import AddBacklogTask from './AddBacklogTask'
 import DroppableBacklogTasksList from "./DroppableBacklogTasksList"
 import CreateSprint from './CreateSprint'
+import ActiveSprintColumns from './ActiveSprintColumns'
 import Toast from 'react-bootstrap/Toast'
 import Api from '../utils/api'
 import { DragDropContext } from 'react-beautiful-dnd'
@@ -180,6 +181,7 @@ const BacklogTasksList = ({ backlog }) => {
   var firstSprint = sprints != null && sprints.length > 0 ? sprints[0] : null
   return (
     <div>
+      <ActiveSprintColumns sprint={firstSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />
       <DragDropContext onDragEnd={beautifulOnDragEnd}>
         {
           firstSprint

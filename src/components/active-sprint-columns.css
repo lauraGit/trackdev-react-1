@@ -1,0 +1,22 @@
+.active-sprint-columns {
+  display: flex;
+}
+
+.active-sprint-columns__column {
+  margin-right: 20px;
+}
+
+.active-sprint-columns__column:last-child {
+  margin-right: 0;
+}
+
+.active-sprint-columns__title {
+  text-align: center;
+}
+
+.active-sprint-columns__list {
+  border: 1px solid #dcdcdc;
+  min-height: 100px;
+  background-color: #eee;
+  padding: 0px 5px;
+}
