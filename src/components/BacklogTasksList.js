@@ -1,14 +1,17 @@
 import './backlog-tasks-list.css'
 import { useEffect, useState } from 'react'
 import AddBacklogTask from './AddBacklogTask'
-import BacklogTaskItem from "./BacklogTaskItem"
+import DroppableBacklogTasksList from "./DroppableBacklogTasksList"
 import CreateSprint from './CreateSprint'
+import Toast from 'react-bootstrap/Toast'
 import Api from '../utils/api'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 const BacklogTasksList = ({ backlog }) => {
   const [sprints, setSprints] = useState(null)
   const [sprintTasks, setSprintTasks] = useState([])
   const [backlogTasks, setBacklogTasks] = useState([])
+  const [error, setError] = useState(null)
 
   useEffect(function() {    
     if(backlog?.id) {
@@ -23,6 +26,13 @@ const BacklogTasksList = ({ backlog }) => {
       requestSprintTasks(backlog.id, sprintId)
     }
   }, [sprints])
+
+  useEffect(function() {
+    if(error) {
+      const timer = setTimeout(() => setError(null), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [error])
 
   async function requestSprints(backlogId) {
     Api.get(`/backlogs/${backlogId}/sprints`)
@@ -42,7 +52,7 @@ const BacklogTasksList = ({ backlog }) => {
       .catch(() => {})
   }
 
-  function onDataTouched() {
+  function onBacklogDataTouched() {
     requestBacklogTasks(backlog.id)
   }
 
@@ -51,7 +61,116 @@ const BacklogTasksList = ({ backlog }) => {
   }
 
   function onSprintsTouched() {
-    requestSprints()
+    requestSprints(backlog.id)
+  }
+
+  function toggleToast() {
+    setError(null)
+  }
+
+  function newTasksListOrdered(tasks, taskId, sourceIndex, destinationIndex) {
+    const movedTask = tasks.find(t => t.id == taskId)
+    const newTasks = Array.from(tasks)
+    newTasks.splice(sourceIndex, 1)
+    newTasks.splice(destinationIndex, 0, movedTask)
+    return newTasks
+  }
+
+
+  function resolveDestinationRank(source, destination) {
+    let rank = destination.index
+    if(destination.droppableId.startsWith("backlog-tasks")) {
+      if(backlogTasks.length > 0) {
+        rank+= backlogTasks[0].rank
+      } else if (sprintTasks.length > 0) {
+        rank+= sprintTasks[sprintTasks.length - 1].rank + 1
+      }
+      if(source.droppableId !== destination.droppableId
+        && source.droppableId.startsWith("sprint-tasks-")) {
+        rank--
+      }
+    } else if (destination.droppableId.startsWith("sprint-tasks-")) {
+      if(sprintTasks.length > 0) {
+        rank+= sprintTasks[0].rank
+      } else {
+        rank++
+      }
+    }
+    return rank
+  }
+
+  function beautifulOnDragEnd(result) {
+    const { destination, source, draggableId } = result;
+    if(!destination) {
+      return;
+    }
+    if(destination.droppableId === source.droppableId &&
+      destination.index === source.index) {
+      return;
+    }
+
+    const draggedTaskId = draggableId.split('-')[2]
+    const rank = resolveDestinationRank(source, destination)
+    if(source.droppableId === destination.droppableId) {
+      // Just re-order.
+      // Optimistically save new order in local state
+      if(source.droppableId.startsWith("backlog-tasks")) {
+        const newTasks = newTasksListOrdered(backlogTasks, draggedTaskId, source.index, destination.index)
+        setBacklogTasks(newTasks)         
+      } else if (source.droppableId.startsWith("sprint-tasks-")) {
+        const newTasks = newTasksListOrdered(sprintTasks, draggedTaskId, source.index, destination.index)
+        setSprintTasks(newTasks)
+      }
+      // Update to server
+      updateTask(draggedTaskId, { rank: rank }) 
+
+    } else if(destination.droppableId.startsWith('sprint-tasks-') 
+      && source.droppableId.startsWith('backlog-tasks')) {        
+        // Add to sprint
+
+        // In local state
+        const movedTask = backlogTasks.find(t => t.id == draggedTaskId)
+        const newBacklogTasks = Array.from(backlogTasks)
+        newBacklogTasks.splice(source.index, 1)
+        setBacklogTasks(newBacklogTasks)
+
+        const newSprintTasks = Array.from(sprintTasks)
+        newSprintTasks.splice(destination.index, 0, movedTask)
+        setSprintTasks(newSprintTasks)
+        
+        // Update to server
+        const sprintId = destination.droppableId.split('-')[2]
+        updateTask(draggedTaskId, { activeSprint: sprintId, rank: rank })
+
+    } else if(destination.droppableId.startsWith('backlog-tasks')
+      && source.droppableId.startsWith('sprint-tasks-')) {
+        // Remove from sprint
+
+        // In local state
+        const movedTask = sprintTasks.find(t => t.id == draggedTaskId)        
+        const newSprintTasks = Array.from(sprintTasks)
+        newSprintTasks.splice(source.index, 1)
+        setSprintTasks(newSprintTasks)
+
+        const newBacklogTasks = Array.from(backlogTasks)
+        newBacklogTasks.splice(destination.index, 0, movedTask)
+        setBacklogTasks(newBacklogTasks)
+
+        // Update to server        
+        updateTask(draggedTaskId, { activeSprint: null, rank: rank })        
+    }
+    // Move from sprint to another sprint not supported
+  }
+  
+  function updateTask(taskId, changes) {
+    Api.patch(`/tasks/${taskId}`, changes)
+    .then(data => {
+      onBacklogDataTouched()
+      onSprintDataTouched()
+    })
+    .catch(error => {
+      setError(error?.details?.message || 'Unknown error')
+    })
   }
 
   if(!backlog || !backlogTasks || !sprints) {
@@ -61,35 +180,34 @@ const BacklogTasksList = ({ backlog }) => {
   var firstSprint = sprints != null && sprints.length > 0 ? sprints[0] : null
   return (
     <div>
-      {
-        firstSprint
-          ? (
-            <div>
-              <h4>Sprint {firstSprint.name}</h4>
-              <div className="backlog-tasks-list__sprint-tasks">
-                {
-                  sprintTasks && sprintTasks.length > 0
-                    ? sprintTasks.map(task => (
-                      <BacklogTaskItem key={task.id} task={task} onDataTouched={onSprintDataTouched} totalCount={sprintTasks.length} />
-                    ))
-                    : null
-                }
+      <DragDropContext onDragEnd={beautifulOnDragEnd}>
+        {
+          firstSprint
+            ? (
+              <div>
+                <h4>{firstSprint.name}</h4>
+                <p>{new Date(firstSprint.startDate).toLocaleDateString()} - {new Date(firstSprint.endDate).toLocaleDateString()}</p>
+                <DroppableBacklogTasksList listId={`sprint-tasks-${firstSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
               </div>
+          )
+          : null
+      }      
+        <AddBacklogTask backlogId={backlog.id} onDataTouched={onBacklogDataTouched} />
+        <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} />
+        <DroppableBacklogTasksList listId="backlog-tasks" tasks={backlogTasks} onDataTouched={onBacklogDataTouched}/>
+      </DragDropContext>
+      {
+        error
+          ? (
+            <div aria-live="polite" style={{position:'fixed', bottom: '30px', right: '30px', zIndex: 5}}>
+              <Toast onClose={toggleToast} delay={4000} autohide className="bg-danger text-white" animation={false}>
+                <Toast.Header><span className="mr-auto">Error editing tasks</span></Toast.Header>
+                <Toast.Body>{error}</Toast.Body>
+              </Toast>
             </div>
           )
           : null
-      }
-      <AddBacklogTask backlogId={backlog.id} onDataTouched={onDataTouched} />
-      <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} />
-      <div className="backlog-tasks-list__backlog-tasks">
-        { 
-          backlogTasks.length == 0
-            ? (<p>You don't have any tasks yet.</p>)
-            : backlogTasks.map(task => (
-                <BacklogTaskItem key={task.id} task={task} onDataTouched={onDataTouched} totalCount={backlogTasks.length} />
-              ))
-        }
-      </div>
+      }           
     </div>
   )
 }

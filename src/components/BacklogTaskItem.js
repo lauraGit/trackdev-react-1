@@ -9,7 +9,7 @@ import Alert from 'react-bootstrap/Alert'
 import Toast from 'react-bootstrap/Toast'
 import Api from '../utils/api'
 
-const BacklogTaskItem = ({ task, onDataTouched, totalCount }) => {
+const BacklogTaskItem = ({ task, onDataTouched, minRank, maxRank }) => {
   const [newRank, setNewRank ] = useState(task.rank)
   const [validated, setValidated] = useState(false)
   const [errors, setErrors] = useState({})
@@ -29,10 +29,10 @@ const BacklogTaskItem = ({ task, onDataTouched, totalCount }) => {
   }, [task])
 
   function handleDropdownSelect(eventKey, event) {
-    let rank = 1;
+    let rank = null;
     switch(eventKey) {
       case 'move-to-top':
-        rank = 1;
+        rank = minRank;
         break;
       case 'move-up':
         rank = task.rank - 1
@@ -41,10 +41,12 @@ const BacklogTaskItem = ({ task, onDataTouched, totalCount }) => {
         rank = task.rank + 1
         break;
       case 'move-to-bottom':
-        rank = totalCount
+        rank = maxRank
         break;
     }
-    updateRank(rank, 'menuItem')
+    if(rank != null)  {
+      updateRank(rank, 'menuItem')
+    }
   }
 
   function requestMove() {
@@ -84,7 +86,7 @@ const BacklogTaskItem = ({ task, onDataTouched, totalCount }) => {
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {
-            task.rank > 1
+            task.rank > minRank
             ? (
               <Fragment>
                 <Dropdown.Item eventKey="move-to-top">Move to top</Dropdown.Item>
@@ -93,7 +95,7 @@ const BacklogTaskItem = ({ task, onDataTouched, totalCount }) => {
             )
             : null            
           }
-          { task.rank < totalCount
+          { task.rank < maxRank
             ? (
               <Fragment>
                 <Dropdown.Item eventKey="move-down">Move one down</Dropdown.Item>
@@ -108,9 +110,9 @@ const BacklogTaskItem = ({ task, onDataTouched, totalCount }) => {
               <Form.Group controlId={moveControlId}>
                 <Form.Label>Move to</Form.Label>
                 <Form.Control name="moveTo" value={newRank} onChange={(e) => setNewRank(e.target.value)}
-                              type="number" required min="1" max={totalCount} />
+                              type="number" required min={minRank} max={maxRank} />
                 <Form.Control.Feedback type="invalid">
-                    Please enter a valid rank.
+                    Please enter a valid rank between {minRank} and {maxRank}.
                 </Form.Control.Feedback>
               </Form.Group>
               <Button type="submit" variant="primary" size="sm">
@@ -127,7 +129,7 @@ const BacklogTaskItem = ({ task, onDataTouched, totalCount }) => {
         errors.menuItem
           ? (
             <div aria-live="polite" style={{position:'fixed', bottom: '30px', right: '30px', zIndex: 5}}>
-              <Toast show={showToast} onClose={toggleToast} delay={4000} autohide className="bg-danger text-white">
+              <Toast show={showToast} onClose={toggleToast} delay={4000} autohide className="bg-danger text-white" animation={false}>
                 <Toast.Header><span className="mr-auto">Error editing task</span></Toast.Header>
                 <Toast.Body>{errors.menuItem}</Toast.Body>
               </Toast>
