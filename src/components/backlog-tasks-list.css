@@ -1,0 +1,5 @@
+.backlog-tasks-list__sprint-tasks {
+  min-height: 100px;
+  border: 1px solid #dcdcdc;
+  background-color: #eee;
+}
