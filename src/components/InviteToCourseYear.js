@@ -3,6 +3,7 @@ import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
+import FormSubmitCancelButtons from "./FormSubmitCancelButtons"
 
 const InviteToCourseYear = ( { courseYearId, onDataTouched } ) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -68,12 +69,7 @@ const InviteToCourseYear = ( { courseYearId, onDataTouched } ) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Button type="submit" variant="primary">
-          Invite
-        </Button>
-        <Button type="button" onClick={handleCancelClick} variant="outline-secondary">
-          Cancel
-        </Button>
+        <FormSubmitCancelButtons submitButtonText="Invite" onCancelClick={handleCancelClick} />
         {
           errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
         }

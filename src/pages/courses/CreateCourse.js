@@ -1,8 +1,8 @@
 import { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import Api from '../../utils/api'
-import Button from 'react-bootstrap/Button'
+import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
 
@@ -62,9 +62,7 @@ class CreateCourse extends Component {
                 Please enter a valid name.
               </Form.Control.Feedback>
             </Form.Group>
-            
-            <Button type="submit" variant="primary">Create course</Button>
-            <Link to="/courses">Cancel</Link>
+            <FormSubmitCancelButtons submitButtonText="Create course" cancelUrl="/courses" />
             {
               this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }

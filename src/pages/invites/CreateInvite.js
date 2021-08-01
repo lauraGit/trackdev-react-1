@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import Restricted from "../../components/Restricted"
 import Api from '../../utils/api'
-import Button from 'react-bootstrap/Button'
+import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
 
@@ -58,6 +58,7 @@ class CreateInvite extends Component {
   }
 
   render() {
+    const backUrl = `/invites`
     if(this.state.created) {
       return (<div><p>Invite has been created successfully.</p></div>)
     }
@@ -86,7 +87,7 @@ class CreateInvite extends Component {
                   Please select some roles.
               </Form.Control.Feedback>
             </Form.Group>
-            <Button type="submit" variant="primary">Invite</Button>
+            <FormSubmitCancelButtons submitButtonText="Invite" cancelUrl={backUrl} />
             {
               this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }

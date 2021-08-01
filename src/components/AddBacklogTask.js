@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
+import FormSubmitCancelButtons from "./FormSubmitCancelButtons"
 
 const AddBacklogTask = ( { backlogId, onDataTouched }) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -68,9 +69,7 @@ const AddBacklogTask = ( { backlogId, onDataTouched }) => {
                   Please enter a valid name.
               </Form.Control.Feedback>
             </Form.Group>
-
-            <Button type="submit" variant="primary">Create task</Button>
-            <Button type="button" onClick={onCancel} variant="outline-secondary">Cancel</Button>
+            <FormSubmitCancelButtons submitButtonText="Create task" onCancelClick={onCancel} />
             {
               errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
             }

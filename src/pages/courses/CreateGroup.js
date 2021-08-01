@@ -1,10 +1,10 @@
 import { Component } from 'react'
 import { withRouter } from "react-router"
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import MultiListInput from '../../components/MultiListInput'
+import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
 import Api from '../../utils/api'
-import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
 
@@ -90,9 +90,7 @@ class CreateGroup extends Component {
               <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
                             id="create-group-name-new-member" possibleValues={possibleStudents}/>  
             </Form.Group>
-
-            <Button type="submit" variant="primary">Create group</Button>
-            <Link to={backUrl}>Cancel</Link>
+            <FormSubmitCancelButtons submitButtonText="Create group" cancelUrl={backUrl} />
             {
               this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }

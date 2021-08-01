@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
+import FormSubmitCancelButtons from "./FormSubmitCancelButtons"
 
 const CreateSprint = ( { backlogId, onDataTouched } ) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -91,14 +92,7 @@ const CreateSprint = ( { backlogId, onDataTouched } ) => {
               </Form.Group>
             </Form.Row>
             
-            <Form.Row>
-              <Col xs="auto">
-                <Button type="submit" variant="primary">Create sprint</Button>
-              </Col>
-              <Col xs="auto">
-                <Button type="button" onClick={onCancel} variant="outline-secondary">Cancel</Button>
-              </Col>
-            </Form.Row>
+            <FormSubmitCancelButtons submitButtonText="Create sprint" onCancelClick={onCancel} />
             {
               errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
             }
