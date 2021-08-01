@@ -4,6 +4,8 @@ import AddBacklogTask from './AddBacklogTask'
 import DroppableBacklogTasksList from "./DroppableBacklogTasksList"
 import CreateSprint from './CreateSprint'
 import ActiveSprintColumns from './ActiveSprintColumns'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 import Toast from 'react-bootstrap/Toast'
 import Api from '../utils/api'
 import { DragDropContext } from 'react-beautiful-dnd'
@@ -193,25 +195,44 @@ const BacklogTasksList = ({ backlog }) => {
   }
 
   var firstSprint = sprints != null && sprints.length > 0 ? sprints[0] : null
+
+  const backlogView = (
+    <DragDropContext onDragEnd={beautifulOnDragEnd}>
+      {
+        firstSprint
+          ? (
+            <div>
+              <h4>{firstSprint.name}</h4>
+              <p>{new Date(firstSprint.startDate).toLocaleDateString()} - {new Date(firstSprint.endDate).toLocaleDateString()}</p>
+              <DroppableBacklogTasksList listId={`sprint-tasks-${firstSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
+            </div>
+        )
+        : null
+      }      
+      <AddBacklogTask backlogId={backlog.id} onDataTouched={onBacklogDataTouched} />
+      <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} />
+      <DroppableBacklogTasksList listId="backlog-tasks" tasks={backlogTasks} onDataTouched={onBacklogDataTouched}/>
+    </DragDropContext>
+  )
+
+  const activeSprintView = (
+      <ActiveSprintColumns sprint={firstSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} onStatusChange={onStatusChange} />
+  )
+
   return (
     <div>
-      <ActiveSprintColumns sprint={firstSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} onStatusChange={onStatusChange} />
-      <DragDropContext onDragEnd={beautifulOnDragEnd}>
-        {
-          firstSprint
-            ? (
-              <div>
-                <h4>{firstSprint.name}</h4>
-                <p>{new Date(firstSprint.startDate).toLocaleDateString()} - {new Date(firstSprint.endDate).toLocaleDateString()}</p>
-                <DroppableBacklogTasksList listId={`sprint-tasks-${firstSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
-              </div>
-          )
-          : null
-      }      
-        <AddBacklogTask backlogId={backlog.id} onDataTouched={onBacklogDataTouched} />
-        <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} />
-        <DroppableBacklogTasksList listId="backlog-tasks" tasks={backlogTasks} onDataTouched={onBacklogDataTouched}/>
-      </DragDropContext>
+      <Tabs defaultActiveKey="backlogView" transition={false}>
+        <Tab eventKey="backlogView" title="Backlog">
+          <div className="backlog-tasks-list__tab">
+            {backlogView}
+          </div>          
+        </Tab>
+        <Tab eventKey="activeSprintView" title="Active Sprint">
+          <div className="backlog-tasks-list__tab">
+            {activeSprintView}
+          </div>          
+        </Tab>
+      </Tabs>
       {
         error
           ? (

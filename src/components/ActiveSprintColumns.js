@@ -38,48 +38,54 @@ const ActiveSprintColumns = ({ sprint, tasks, onDataTouched, onStatusChange }) =
     const draggedTaskId = draggableId.split('-')[2]
     onStatusChange(draggedTaskId, destination.droppableId)
   }
-
+  if(!sprint) {
+    return <p>There is no active sprint.</p>
+  }
   return (    
     <div className="active-sprint-columns">
-      <DragDropContext onDragEnd={beautifulOnDragEnd}>
-      {
-        Object.keys(columns).map(columnKey => (
-          <div key={columnKey} className="active-sprint-columns__column">
-            <h5 className="active-sprint-columns__title">{columnKey}</h5>
-            <Droppable droppableId={columnKey}>
-              {
-                (provided, snapshot) => (
-                  <div ref={provided.innerRef}
-                    className={`active-sprint-columns__list
-                              ${snapshot.isDraggingOver ? 'active-sprint-columns__list--drag-over' : null }`}
-                    {...provided.droppableProps} >
-                    {
-                      columns[columnKey].tasks.map((task, index) => {
-                        return (
-                          <Draggable draggableId={`column-task-${task.id}`} index={index} key={task.id}>
-                            {
-                              (provided) => (
-                                <div ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}>
-                                  <ColumnTaskItem key={task.id} task={task} />
-                                </div>
-                              )
-                            }
-                          </Draggable>
-                          
-                        )
-                      })              
-                    }
-                    {provided.placeholder}
-                  </div>
-                )
-              }
-            </Droppable>
-          </div>
-        ))
-      }
-      </DragDropContext>
+      <h4>{sprint.name}</h4>
+      <p>{new Date(sprint.startDate).toLocaleDateString()} - {new Date(sprint.endDate).toLocaleDateString()}</p>
+      <div className="active-sprint-columns__columns">
+        <DragDropContext onDragEnd={beautifulOnDragEnd}>
+        {
+          Object.keys(columns).map(columnKey => (
+            <div key={columnKey} className="active-sprint-columns__column">
+              <h5 className="active-sprint-columns__title">{columnKey}</h5>
+              <Droppable droppableId={columnKey}>
+                {
+                  (provided, snapshot) => (
+                    <div ref={provided.innerRef}
+                      className={`active-sprint-columns__list
+                                ${snapshot.isDraggingOver ? 'active-sprint-columns__list--drag-over' : null }`}
+                      {...provided.droppableProps} >
+                      {
+                        columns[columnKey].tasks.map((task, index) => {
+                          return (
+                            <Draggable draggableId={`column-task-${task.id}`} index={index} key={task.id}>
+                              {
+                                (provided) => (
+                                  <div ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}>
+                                    <ColumnTaskItem key={task.id} task={task} />
+                                  </div>
+                                )
+                              }
+                            </Draggable>
+                            
+                          )
+                        })              
+                      }
+                      {provided.placeholder}
+                    </div>
+                  )
+                }
+              </Droppable>
+            </div>
+          ))
+        }
+        </DragDropContext>
+      </div>      
     </div>
   )
 }

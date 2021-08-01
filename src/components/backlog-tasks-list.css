@@ -10,3 +10,7 @@
   transition: background-color 0.2s ease;
   background-color: #ccc;
 }
+
+.backlog-tasks-list__tab {
+  padding: 20px;
+}
