@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useState, Fragment } from "react"
 import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
 
 const CreateSprint = ( { backlogId, onDataTouched } ) => {
@@ -25,7 +26,7 @@ const CreateSprint = ( { backlogId, onDataTouched } ) => {
     setMode("create")
   }
 
-  function handleCancelClick() {
+  function onCancel() {
     resetState()
   }
 
@@ -52,53 +53,50 @@ const CreateSprint = ( { backlogId, onDataTouched } ) => {
   }
 
   // Render
-  if(mode === "normal") {
-    return (
+  return (
+    <Fragment>
       <div>
-        <Button type="button" onClick={handleNewClick} variant="primary">
+        <Button type="button" onClick={handleNewClick} variant="outline-primary" size="sm">
           New sprint
         </Button>
       </div>
-    )
-  }
+      <Modal show={mode === "create"} onHide={onCancel} animation={false}>
+        <Modal.Header>
+          <Modal.Title>New sprint</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit} noValidate validated={validated}>
+            <Form.Group controlId="create-sprint-name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control name="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+              <Form.Control.Feedback type="invalid">
+                  Please enter a valid name.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="create-sprint-start-date">
+              <Form.Label>Start date</Form.Label>
+              <Form.Control name="startDate" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+              <Form.Control.Feedback type="invalid">
+                  Please enter a valid start date.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="create-sprint-end-date">
+              <Form.Label>End date</Form.Label>
+              <Form.Control name="endDate" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+              <Form.Control.Feedback type="invalid">
+                  Please enter a valid end date.
+              </Form.Control.Feedback>
+            </Form.Group>
 
-  return (
-    <div>
-      <h4>New sprint</h4>
-      <Form onSubmit={handleSubmit} noValidate validated={validated}>
-        <Form.Group controlId="create-sprint-name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control name="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-          <Form.Control.Feedback type="invalid">
-              Please enter a valid name.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="create-sprint-start-date">
-          <Form.Label>Start date</Form.Label>
-          <Form.Control name="startDate" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
-          <Form.Control.Feedback type="invalid">
-              Please enter a valid start date.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="create-sprint-end-date">
-          <Form.Label>End date</Form.Label>
-          <Form.Control name="endDate" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
-          <Form.Control.Feedback type="invalid">
-              Please enter a valid end date.
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Button type="submit" variant="primary">
-          Create sprint
-        </Button>
-        <Button type="button" onClick={handleCancelClick} variant="outline-secondary">
-          Cancel
-        </Button>
-        {
-          errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
-        }
-      </Form>
-    </div>
+            <Button type="submit" variant="primary">Create sprint</Button>
+            <Button type="button" onClick={onCancel} variant="outline-secondary">Cancel</Button>
+            {
+              errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
+            }
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </Fragment>
   )
 }
 
