@@ -3,10 +3,13 @@ import { useEffect, useState } from 'react'
 import AddBacklogTask from './AddBacklogTask'
 import DroppableBacklogTasksList from "./DroppableBacklogTasksList"
 import CreateSprint from './CreateSprint'
+import EditSprint from './EditSprint'
 import ActiveSprintColumns from './ActiveSprintColumns'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Toast from 'react-bootstrap/Toast'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import Api from '../utils/api'
 import { DragDropContext } from 'react-beautiful-dnd'
 
@@ -202,8 +205,15 @@ const BacklogTasksList = ({ backlog }) => {
         firstSprint
           ? (
             <div>
-              <h4>{firstSprint.name}</h4>
-              <p>{new Date(firstSprint.startDate).toLocaleDateString()} - {new Date(firstSprint.endDate).toLocaleDateString()}</p>
+              <Row>
+                <Col>
+                  <h4>{firstSprint.name}</h4>
+                  <p>{new Date(firstSprint.startDate).toLocaleDateString()} - {new Date(firstSprint.endDate).toLocaleDateString()}</p>
+                </Col>
+                <Col xs="auto">
+                  <EditSprint sprint={firstSprint} backlogId={backlog.id} onDataTouched={onSprintsTouched} />
+                </Col>
+              </Row>
               <DroppableBacklogTasksList listId={`sprint-tasks-${firstSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
             </div>
         )
