@@ -20,12 +20,12 @@ const Task = ( { task, onDataTouched }) => {
   const [ assigneeEditStatus, setAssigneeEditStatus ] = useState({ status: 'normal', error: null})
 
   const statusOptions = [ "TODO", "INPROGRESS", "DONE", "TESTED", "SPRINT", "DELETED", "CREATED" ]
-  const [ possibleAssignees, setPossibleAssignees ] = useState([])
+  const [ groupMembers, setGroupMembers ] = useState([])
 
   useEffect(function() {
     async function requestGroupMembers() {
       Api.get(`/groups/${task.backlog.group.id}`)
-        .then(data => setPossibleAssignees(data.members))
+        .then(data => setGroupMembers(data.members))
         .catch(() => {})
     }
     if(task?.backlog?.group?.id) {
@@ -99,12 +99,17 @@ const Task = ( { task, onDataTouched }) => {
       .catch(error => {
         setAssigneeEditStatus({ status: 'error', error: error?.details?.message || 'Unknown error' })
       })
-  }
+  }    
 
   // RENDER
   if(!task) {
     return null
   }
+
+  const possibleAssignees = groupMembers
+        .map(user => { return {value: user.username, text: user.username }})
+  possibleAssignees.push({value: '', text: 'Unassigned'})
+
   return (
     <div>
       <div className="task-header">
@@ -131,12 +136,10 @@ const Task = ( { task, onDataTouched }) => {
             as="select"
             status={assigneeEditStatus.status}
             error={assigneeEditStatus.error}
-            value={task.assignee?.username}
+            value={task.assignee?.username || ''}
             onChange={handleAssigneeChange}>
               {
-                possibleAssignees
-                  .map(user => user.username)
-                  .map(option => (<option key={option} value={option}>{option}</option>))
+                possibleAssignees.map(option => (<option key={option.value} value={option.value}>{option.text}</option>))
               }
             </EditableField>
         </div>
