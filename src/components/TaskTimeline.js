@@ -28,6 +28,9 @@ const TaskTimeline = ({ changes }) => {
       case "rank_change":
         value = '🥈'
         break;
+      case "active_sprint_change":
+        value = '🔄'
+        break;
     }
 
     return value
@@ -51,6 +54,9 @@ const TaskTimeline = ({ changes }) => {
       case "rank_change":
         value = 'rank'
         break;
+      case "active_sprint_change":
+        value = 'active sprint'
+        break;
     }
 
     return value
@@ -73,6 +79,9 @@ const TaskTimeline = ({ changes }) => {
         break;
       case "rank_change":
         value = change.rank ? (<em>#{change.rank}</em>) : '-'
+        break;
+      case "active_sprint_change":
+        value = change.activeSprint ? (<em>{change.activeSprint.name}</em>) : '-'
         break;
     }
 
