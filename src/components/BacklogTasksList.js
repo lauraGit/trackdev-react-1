@@ -166,12 +166,26 @@ const BacklogTasksList = ({ backlog }) => {
   function updateTask(taskId, changes) {
     Api.patch(`/tasks/${taskId}`, changes)
     .then(data => {
-      onBacklogDataTouched()
-      onSprintDataTouched()
     })
     .catch(error => {
       setError(error?.details?.message || 'Unknown error')
     })
+    .finally(() => {
+      // refresh data
+      onBacklogDataTouched()
+      onSprintDataTouched()
+    })
+  }
+
+  function onStatusChange(taskId, newStatus) {
+    // Update in local to ensure smooth drag & drop
+    const newList = Array.from(sprintTasks)    
+    const updatedTask = newList.find(t => t.id == taskId)
+    updatedTask.status = newStatus
+    setSprintTasks(newList)
+    
+    // Save to server
+    updateTask(taskId, {status: newStatus})
   }
 
   if(!backlog || !backlogTasks || !sprints) {
@@ -181,7 +195,7 @@ const BacklogTasksList = ({ backlog }) => {
   var firstSprint = sprints != null && sprints.length > 0 ? sprints[0] : null
   return (
     <div>
-      <ActiveSprintColumns sprint={firstSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />
+      <ActiveSprintColumns sprint={firstSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} onStatusChange={onStatusChange} />
       <DragDropContext onDragEnd={beautifulOnDragEnd}>
         {
           firstSprint
