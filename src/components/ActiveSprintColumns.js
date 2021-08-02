@@ -38,9 +38,11 @@ const ActiveSprintColumns = ({ sprint, tasks, onDataTouched, onStatusChange }) =
     const draggedTaskId = draggableId.split('-')[2]
     onStatusChange(draggedTaskId, destination.droppableId)
   }
-  if(!sprint) {
+  
+  if(!sprint || sprint.status !== 'ACTIVE') {
     return <p>There is no active sprint.</p>
   }
+
   return (    
     <div className="active-sprint-columns">
       <h4>{sprint.name}</h4>

@@ -8,10 +8,12 @@ import ActiveSprintColumns from './ActiveSprintColumns'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Toast from 'react-bootstrap/Toast'
-import Row from 'react-bootstrap/Row'
+import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import Api from '../utils/api'
 import { DragDropContext } from 'react-beautiful-dnd'
+
 
 const BacklogTasksList = ({ backlog }) => {
   const [sprints, setSprints] = useState(null)
@@ -170,8 +172,7 @@ const BacklogTasksList = ({ backlog }) => {
   
   function updateTask(taskId, changes) {
     Api.patch(`/tasks/${taskId}`, changes)
-    .then(data => {
-    })
+    .then(data => { })
     .catch(error => {
       setError(error?.details?.message || 'Unknown error')
     })
@@ -180,6 +181,22 @@ const BacklogTasksList = ({ backlog }) => {
       onBacklogDataTouched()
       onSprintDataTouched()
     })
+  }
+
+  function updateSprintStatus(sprintId, status) {
+    Api.patch(`/sprints/${sprintId}`, {
+      status: status
+    })
+    .then(data => { onSprintsTouched() })
+    .catch(error => { setError(error?.details?.message || 'Unknown error')})
+  }
+
+  function handleOpenSprint(sprintId) {
+    updateSprintStatus(sprintId, "ACTIVE")
+  }
+
+  function handleCloseSprint(sprintId) {
+    updateSprintStatus(sprintId, "CLOSED")
   }
 
   function onStatusChange(taskId, newStatus) {
@@ -197,36 +214,40 @@ const BacklogTasksList = ({ backlog }) => {
     return null
   }
 
-  var firstSprint = sprints != null && sprints.length > 0 ? sprints[0] : null
+  var activeSprint = sprints != null && sprints.length > 0 ? sprints.find(s => s.status === "DRAFT" || s.status === "ACTIVE") : null
 
   const backlogView = (
     <DragDropContext onDragEnd={beautifulOnDragEnd}>
       {
-        firstSprint
+        activeSprint
           ? (
             <div>
-              <Row>
+              <Form.Row>
                 <Col>
-                  <h4>{firstSprint.name}</h4>
-                  <p>{new Date(firstSprint.startDate).toLocaleDateString()} - {new Date(firstSprint.endDate).toLocaleDateString()}</p>
+                  <h4>{activeSprint.name} <span className="backlog-tasks-list__sprint-title-status">({activeSprint.status})</span></h4>
+                  <p>{new Date(activeSprint.startDate).toLocaleDateString()} - {new Date(activeSprint.endDate).toLocaleDateString()}</p>
                 </Col>
                 <Col xs="auto">
-                  <EditSprint sprint={firstSprint} backlogId={backlog.id} onDataTouched={onSprintsTouched} />
+                  <EditSprint sprint={activeSprint} backlogId={backlog.id} onDataTouched={onSprintsTouched} />
                 </Col>
-              </Row>
-              <DroppableBacklogTasksList listId={`sprint-tasks-${firstSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
+                <Col xs="auto">
+                  {activeSprint.status === "DRAFT" ? <Button variant="primary" size="sm" onClick={() => handleOpenSprint(activeSprint.id)}>Open</Button> : null }
+                  {activeSprint.status === "ACTIVE" ? <Button variant="primary" size="sm" onClick={() => handleCloseSprint(activeSprint.id)}>Close</Button> : null}
+                </Col>
+              </Form.Row>
+              <DroppableBacklogTasksList listId={`sprint-tasks-${activeSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
             </div>
         )
         : null
-      }      
+      }
       <AddBacklogTask backlogId={backlog.id} onDataTouched={onBacklogDataTouched} />
-      <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} />
+      { activeSprint ? null : <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} /> }      
       <DroppableBacklogTasksList listId="backlog-tasks" tasks={backlogTasks} onDataTouched={onBacklogDataTouched}/>
     </DragDropContext>
   )
 
   const activeSprintView = (
-      <ActiveSprintColumns sprint={firstSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} onStatusChange={onStatusChange} />
+      <ActiveSprintColumns sprint={activeSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} onStatusChange={onStatusChange} />
   )
 
   return (
