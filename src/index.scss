@@ -28,6 +28,7 @@
 @import "../node_modules/bootstrap/scss/dropdown";
 @import "../node_modules/bootstrap/scss/modal";
 @import "../node_modules/bootstrap/scss/nav";
+@import "../node_modules/bootstrap/scss/card";
 @import "../node_modules/bootstrap/scss/toasts";
 
 // Utilities
@@ -41,4 +42,5 @@
 // -----------------------------------
 // Styles for new and custom TrackDev components are placed next to the .js with
 // the React component with a .scss file with the same name.
-@import "./App.scss"
+@import "./App.scss";
+@import "./components/sprint-history.scss";

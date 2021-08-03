@@ -5,6 +5,8 @@ import DroppableBacklogTasksList from "./DroppableBacklogTasksList"
 import CreateSprint from './CreateSprint'
 import EditSprint from './EditSprint'
 import ActiveSprintColumns from './ActiveSprintColumns'
+import SprintsHistory from './SprintsHistory'
+import SprintStatus from './SprintStatus'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Toast from 'react-bootstrap/Toast'
@@ -224,7 +226,7 @@ const BacklogTasksList = ({ backlog }) => {
             <div>
               <Form.Row>
                 <Col>
-                  <h4>{activeSprint.name} <span className="backlog-tasks-list__sprint-title-status">({activeSprint.status})</span></h4>
+                  <h4>{activeSprint.name} <SprintStatus status={activeSprint.status} isTitle={true} /></h4>
                   <p>{new Date(activeSprint.startDate).toLocaleDateString()} - {new Date(activeSprint.endDate).toLocaleDateString()}</p>
                 </Col>
                 <Col xs="auto">
@@ -238,7 +240,7 @@ const BacklogTasksList = ({ backlog }) => {
               <DroppableBacklogTasksList listId={`sprint-tasks-${activeSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
             </div>
         )
-        : null
+        : (<p>You don't have any active sprint.</p>)
       }
       <AddBacklogTask backlogId={backlog.id} onDataTouched={onBacklogDataTouched} />
       { activeSprint ? null : <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} /> }      
@@ -248,6 +250,10 @@ const BacklogTasksList = ({ backlog }) => {
 
   const activeSprintView = (
       <ActiveSprintColumns sprint={activeSprint} tasks={sprintTasks} onDataTouched={onSprintDataTouched} onStatusChange={onStatusChange} />
+  )
+
+  const sprintsHistoryView = (
+    <SprintsHistory backlogId={backlog.id} sprints={sprints} />
   )
 
   return (
@@ -261,6 +267,11 @@ const BacklogTasksList = ({ backlog }) => {
         <Tab eventKey="activeSprintView" title="Active Sprint">
           <div className="backlog-tasks-list__tab">
             {activeSprintView}
+          </div>
+        </Tab>
+        <Tab eventKey="sprintsHistoryView" title="History">
+          <div className="backlog-tasks-list__tab">
+            {sprintsHistoryView}
           </div>          
         </Tab>
       </Tabs>
