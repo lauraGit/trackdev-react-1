@@ -1,14 +1,13 @@
 import BacklogTaskItem from "./BacklogTaskItem"
+import AddSubtask from "./AddSubtask"
 
 const TaskSubtasks = ({ task, onDataTouched }) => {
   if(!task && !task.childTasks) {
     return null
   }
-  if(task.childTasks.length === 0) {
-    return <p>No subtasks</p>
-  } 
   return (
     <div>
+      <AddSubtask taskId={task.id} onDataTouched={onDataTouched} />
       {
         task.childTasks.length > 0
           ?
