@@ -1,4 +1,5 @@
 import BacklogTaskItem from "./BacklogTaskItem"
+import BacklogTaskMenu from "./BacklogTaskMenu"
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
 const DroppableBacklogTasksList = ({listId, tasks, onDataTouched}) => {
@@ -20,7 +21,12 @@ const DroppableBacklogTasksList = ({listId, tasks, onDataTouched}) => {
                         <div ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}>
-                          <BacklogTaskItem task={task} onDataTouched={onDataTouched} minRank={tasks[0].rank} maxRank={tasks[tasks.length-1].rank} />
+                          <BacklogTaskItem task={task}
+                                menuActions={(
+                                      <BacklogTaskMenu
+                                        task={task}
+                                        onDataTouched={onDataTouched} minRank={tasks[0].rank} maxRank={tasks[tasks.length-1].rank} />)}
+                             />
                         </div>                                    
                       )
                     }

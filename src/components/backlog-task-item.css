@@ -18,3 +18,7 @@
 .backlog-task-item__menu-form {
   padding: 5px 15px;
 }
+
+.backlog-task-item__description > * {
+  margin-right: 10px;
+}
