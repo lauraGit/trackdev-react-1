@@ -1,0 +1,25 @@
+.sprint-history {
+  margin-bottom: 20px;
+}
+
+.sprint-history__toggle {
+  cursor: pointer;
+  border-bottom: 1px solid theme-color-level("secondary", -10);
+}
+
+.sprint-history__toggle > * {
+  display: inline-block;
+}
+
+.sprint-history__toggle:hover {
+  color: $primary;
+  border-bottom: 1px solid theme-color-level("primary", -10);
+}
+
+.sprint-history__toggle-icon {
+  margin-right: 10px;
+}
+
+.sprint-history__collapse {
+  padding: 5px 10px;
+}

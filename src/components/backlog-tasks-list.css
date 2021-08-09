@@ -1,0 +1,16 @@
+.backlog-tasks-list__tasks {
+  min-height: 100px;
+  border: 1px solid #dcdcdc;
+  background-color: #eee;
+  padding: 0px 5px;
+}
+
+.backlog-tasks-list__tasks--drag-over,
+.backlog-tasks-list__tasks--drag-over {
+  transition: background-color 0.2s ease;
+  background-color: #ccc;
+}
+
+.backlog-tasks-list__tab {
+  padding: 20px;
+}

@@ -1,15 +1,23 @@
 import { useState, Fragment } from "react"
 import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
-import FormSubmitCancelButtons from "./FormSubmitCancelButtons"
+import SprintForm from "./SprintForm"
 
-const AddBacklogTask = ( { backlogId, onDataTouched }) => {
+function getJsonDateString(date) {
+  return date.toJSON().split('T')[0]
+}
+
+const emptySprint = {
+  name: '',
+  startDate: getJsonDateString(new Date()),
+  endDate: getJsonDateString(new Date())
+}
+
+const CreateSprint = ( { backlogId, onDataTouched } ) => {
   const [mode, setMode] = useState("normal") // normal/create
   const [errors, setErrors] = useState({})
-  const [name, setName] = useState("")
+  const [formSprint, setFormSprint] = useState(emptySprint)
   const [validated, setValidated] = useState(false)
 
   function handleSubmit(e) {
@@ -30,10 +38,12 @@ const AddBacklogTask = ( { backlogId, onDataTouched }) => {
   }
 
   async function requestCreate() {
-    Api.post(`/backlogs/${backlogId}/tasks`, {
-      name: name
+    Api.post(`/backlogs/${backlogId}/sprints`, {
+      name: formSprint.name,
+      startDate: formSprint.startDate,
+      endDate: formSprint.endDate
     })
-    .then(data => {
+    .then(data => {  
       onDataTouched()
       resetState()
     })
@@ -42,7 +52,7 @@ const AddBacklogTask = ( { backlogId, onDataTouched }) => {
 
   function resetState() {
     setMode("normal")
-    setName("")
+    setFormSprint(emptySprint)
     setErrors({})
     setValidated(false)
   }
@@ -52,32 +62,21 @@ const AddBacklogTask = ( { backlogId, onDataTouched }) => {
     <Fragment>
       <div>
         <Button type="button" onClick={handleNewClick} variant="outline-primary" size="sm">
-          New task
+          New sprint
         </Button>
       </div>
       <Modal show={mode === "create"} onHide={onCancel} animation={false}>
         <Modal.Header>
-          <Modal.Title>New task</Modal.Title>
+          <Modal.Title>New sprint</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit} noValidate validated={validated}>
-            <Form.Group controlId="add-backlog-task-name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control name="name" value={name} onChange={(e) => setName(e.target.value)}
-                            required />
-              <Form.Control.Feedback type="invalid">
-                  Please enter a valid name.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <FormSubmitCancelButtons submitButtonText="Create task" onCancelClick={onCancel} />
-            {
-              errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
-            }
-          </Form>
+        <SprintForm onSubmit={handleSubmit} validated={validated} onCancel={onCancel}
+                      sprint={formSprint} onSprintChange={(formData) => setFormSprint(formData)} error={errors.create}
+                      submitButtonText="Create sprint" />
         </Modal.Body>
       </Modal>
-    </Fragment>    
+    </Fragment>
   )
 }
 
-export default AddBacklogTask
+export default CreateSprint

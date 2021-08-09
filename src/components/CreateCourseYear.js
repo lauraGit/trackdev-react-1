@@ -3,6 +3,7 @@ import Api from "../utils/api"
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
+import FormSubmitCancelButtons from "./FormSubmitCancelButtons"
 
 const CreateCourseYear = (props) => {
   const [mode, setMode] = useState("normal") // normal/create
@@ -68,13 +69,7 @@ const CreateCourseYear = (props) => {
               Please enter a valid start year.
           </Form.Control.Feedback>
         </Form.Group>
-
-        <Button type="submit" variant="primary">
-          Create course year
-        </Button>
-        <Button type="button" onClick={handleCancelClick} variant="outline-secondary">
-          Cancel
-        </Button>
+        <FormSubmitCancelButtons submitButtonText="Create course year" onCancelClick={handleCancelClick} />
         {
           errors.create ? (<Alert variant="danger">{errors.create}</Alert>) : null
         }

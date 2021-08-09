@@ -5,102 +5,84 @@ import UserMention from './UserMention'
 import TaskStatus from './TaskStatus'
 import EstimationPoints from './EstimationPoints'
 
+function formatDateTime(changedAt) {
+  const date = new Date(changedAt)
+  return `${date.toLocaleString()}`
+
+}
+
+function formatConcreteChange(change) {
+  let prettyChange = { icon: 'unknown', text: 'unknown', value: 'unknown' }
+  switch(change.type) {
+    case "name_change":        
+      prettyChange = {
+        icon: '📝',
+        text: 'name',
+        value: (<em>{change.name}</em>)
+      }
+      break;
+    case "status_change":
+      prettyChange = {
+        icon: '📊',
+        text: 'status',
+        value: (<TaskStatus status={change.status} />)
+      }
+      break;
+    case "assignee_change":
+      prettyChange = {
+        icon: '🙋‍♀️',
+        text: 'assignee',
+        value: change.assignee ? (<UserMention user={change.assignee} />) : '-'
+      }
+      break;
+    case "estimation_points_change":
+      prettyChange = {
+        icon: '🃏',
+        text: 'estimation points',
+        value: change.estimationPoints ? (<EstimationPoints estimationPoints={change.estimationPoints} />) : '-'
+      }
+      break;
+    case "rank_change":
+      prettyChange = {
+        icon: '🥈',
+        text: 'rank',
+        value: change.rank ? (<em>#{change.rank}</em>) : '-'
+      }
+      break;
+    case "active_sprint_change":
+      prettyChange = {
+        icon: '🔄',
+        text: 'active sprint',
+        value: change.activeSprint ? (<em>{change.activeSprint.name}</em>) : '-'
+      }
+      break;
+  }
+  return prettyChange
+}
+
 const TaskTimeline = ({ changes }) => {
   if(!changes) {
     return null
   }
 
-  function getChangeIcon(type) {
-    let value = 'unknown'
-    switch(type) {
-      case "name_change":
-        value = '📝'
-        break;
-      case "status_change":
-        value = '📊'
-        break;
-      case "assignee_change":
-        value = '🙋‍♀️'
-        break;
-      case "estimation_points_change":
-        value = '🃏'
-        break;
-      case "rank_change":
-        value = '🥈'
-        break;
-    }
-
-    return value
-  }
-
-  function getChangeText(type) {
-    let value = 'unknown'
-    switch(type) {
-      case "name_change":
-        value = 'name'
-        break;
-      case "status_change":
-        value = 'status'
-        break;
-      case "assignee_change":
-        value = 'assignee'
-        break;
-      case "estimation_points_change":
-        value = 'estimation points'
-        break;
-      case "rank_change":
-        value = 'rank'
-        break;
-    }
-
-    return value
-  }
-
-  function getChangeComponent(change) {
-    let value = 'unknown'
-    switch(change.type) {
-      case "name_change":
-        value = (<em>{change.name}</em>)
-        break;
-      case "status_change":
-        value = (<TaskStatus status={change.status} />)
-        break;
-      case "assignee_change":
-        value = change.assignee ? (<UserMention user={change.assignee} />) : '-'
-        break;
-      case "estimation_points_change":
-        value = change.estimationPoints ? (<EstimationPoints estimationPoints={change.estimationPoints} />) : '-'
-        break;
-      case "rank_change":
-        value = change.rank ? (<em>#{change.rank}</em>) : '-'
-        break;
-    }
-
-    return value
-  }
-
-  function formatDateTime(changedAt) {
-    const date = new Date(changedAt)
-    return `${date.toLocaleString()}`
-
-  }
-
   return (
     <div className="task-timeline">
       {
-        changes.map(change =>  
-          (
+        changes.map(change => {
+          const concreteChange = formatConcreteChange(change)
+          return (
             <div className="task-timeline__item" key={change.id}>
-              <span className="task-timeline__icon">{getChangeIcon(change.type)}</span>
+              <span className="task-timeline__icon">{concreteChange.icon}</span>
               <UserMention user={change.author} />
               <span className="task-timeline__text"> on </span>
               {formatDateTime(change.changedAt)}
               <span className="task-timeline__text"> changed </span>
-              {getChangeText(change.type)}
+              {concreteChange.text}
               <span className="task-timeline__text"> to </span>
-              { getChangeComponent(change) }
+              {concreteChange.value }
             </div>
-          ))
+          )
+        })
       }
     </div>
   )

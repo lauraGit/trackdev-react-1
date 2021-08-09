@@ -1,12 +1,12 @@
 import { Component } from 'react'
-import { Link, Redirect, withRouter } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import MultiListInput from '../../components/MultiListInput'
 import Api from '../../utils/api'
 import withData from '../../components/withData'
-import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
+import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
 
 class EditGroup extends Component {
   constructor(props) {
@@ -106,9 +106,7 @@ class EditGroup extends Component {
               <MultiListInput values={this.state.members} onValuesChange={this.handleMultiListInputChange}
                             id="edit-group-name-new-member" possibleValues={possibleStudents}/>  
             </Form.Group>
-
-            <Button type="submit" variant="primary">Save group</Button>
-            <Link to={backUrl}>Cancel</Link>
+            <FormSubmitCancelButtons submitButtonText="Save group" cancelUrl={backUrl} />
             {
               this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }
