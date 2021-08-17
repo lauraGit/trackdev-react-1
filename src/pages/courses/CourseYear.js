@@ -1,7 +1,7 @@
 import './course-year.css'
 import { useContext, useState, useEffect, Fragment } from "react"
 import { useParams } from "react-router"
-import { Link, Redirect } from "react-router-dom"
+import { Redirect } from "react-router-dom"
 import InviteToCourseYear from "../../components/InviteToCourseYear"
 import CourseInvitesList from "../../components/CourseInvitesList"
 import CourseStudentsList from "../../components/CourseStudentsList"
@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import { LinkContainer } from 'react-router-bootstrap'
 import UserContext from "../../contexts/UserContext"
 import withData from "../../components/withData"
 
@@ -81,7 +82,7 @@ const CourseYear = (props) => {
     <Tab eventKey="groups" title="Groups">
       <div className="course-year-tab">
         <Restricted allowed={["PROFESSOR"]}>
-          <Button href={`/courses/years/${courseYearId}/groups/create`} size="sm" className="mb-3">New group</Button>
+          <LinkContainer to={`/courses/years/${courseYearId}/groups/create`}><Button size="sm" className="mb-3">New group</Button></LinkContainer>
         </Restricted>
         <Groups courseYearId={courseYearId} />
       </div>

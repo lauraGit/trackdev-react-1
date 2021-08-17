@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { LinkContainer } from "react-router-bootstrap"
 import ReceivedInvitesList from "../../components/ReceivedInvitesList"
 import RoleInvitesList from "../../components/RoleInvitesList"
 import Restricted from "../../components/Restricted"
@@ -54,7 +54,7 @@ const InvitesHome = (props) => {
       <Restricted allowed={["PROFESSOR", "ADMIN"]}>
         <div>
           <h3>Sent</h3>
-          <Button href="/invites/create" size="sm" className="mb-3">Invite</Button>
+          <LinkContainer to="/invites/create"><Button size="sm" className="mb-3">Invite</Button></LinkContainer>
           <RoleInvitesList invites={sentInvites} onInvitesTouched={handleInvitesTouched} />
         </div>
       </Restricted>

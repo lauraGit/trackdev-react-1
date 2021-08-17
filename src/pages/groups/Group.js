@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Redirect, withRouter } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import withData from '../../components/withData'
 import UsersList from '../../components/UsersList'
 import Backlogs from '../../components/Backlogs'
@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import { LinkContainer } from 'react-router-bootstrap'
 
 const Group = ({ group }) => {
   const [error, setError] = useState(null)
@@ -44,7 +45,7 @@ const Group = ({ group }) => {
         <Form.Row>
           <Col><h2>{group.name}</h2></Col>
           <Col xs="auto">
-            <Button href={`/groups/${group.id}/edit`} size="sm" variant="outline-primary">Edit</Button>
+            <LinkContainer to={`/groups/${group.id}/edit`}><Button size="sm" variant="outline-primary">Edit</Button></LinkContainer>
           </Col>
           <Col xs="auto">
             <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
