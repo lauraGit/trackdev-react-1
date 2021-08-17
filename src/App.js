@@ -35,8 +35,8 @@ function App() {
     <UserContext.Provider value={{user: user, setUser: setUser}}>
       <Router>
         <div className="app">
+          <Header />
           <Container fluid="lg">
-            <Header />
             <Main>
               <MainRoutes />
             </Main>

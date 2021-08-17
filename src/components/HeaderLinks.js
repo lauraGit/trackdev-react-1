@@ -1,42 +1,28 @@
-import './header-links.css';
-import { useContext, Fragment } from 'react'
+import { useContext } from 'react'
 import UserContext from '../contexts/UserContext'
-import LogoutButton from './LogoutButton'
-import { Link } from 'react-router-dom'
 import Restricted from './Restricted'
+import { NavLink } from 'react-router-dom'
+import { Nav } from 'react-bootstrap'
 
 const HeaderLinks = () => {
   const {user} = useContext(UserContext)
-
-  if(!user) {
+  if(!user || !user.isLoggedIn) {
     return null
   }
 
   if(user.isLoggedIn) {
     return (
-      <Fragment>
-        <nav>
-          <Link to="/invites">Invites</Link>
+        <Nav className="mr-auto">
+          <NavLink className="nav-link" to="/invites">Invites</NavLink>
           <Restricted allowed={["PROFESSOR", "ADMIN"]}>
-            <Link to="/courses">Courses</Link>
+            <NavLink className="nav-link" to="/courses">Courses</NavLink>
           </Restricted>
           <Restricted allowed={["STUDENT"]}>
-            <Link to="/courses/years">Courses</Link>
+            <NavLink className="nav-link" to="/courses/years">Courses</NavLink>
           </Restricted>
-        </nav>
-        <div>
-            <span>{user.profile?.username}</span>
-            <LogoutButton />
-        </div>  
-      </Fragment>
+        </Nav>        
     )
   }
-  return (
-    <nav>
-      <Link to="/login">Login</Link>
-      <Link to="/register">Register</Link>
-    </nav>
-  )
 }
 
 export default HeaderLinks

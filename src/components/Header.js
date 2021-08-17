@@ -1,13 +1,17 @@
-import './header.css';
+import { Navbar, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import HeaderLinks from './HeaderLinks'
+import HeaderUserLinks from './HeaderUserLinks'
 
 const Header = () => {
     return (
-      <header className="header">
-        <Link to="/"><h1>TrackDev</h1></Link>
-        <HeaderLinks />
-      </header>
+      <Navbar bg="light" expand={true} >          
+          <Container fluid="lg">
+            <Link className="navbar-brand" to="/">TrackDev</Link>
+            <HeaderLinks />
+            <HeaderUserLinks />     
+          </Container>
+      </Navbar>
     )
 }
 
