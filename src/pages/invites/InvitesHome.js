@@ -4,6 +4,7 @@ import ReceivedInvitesList from "../../components/ReceivedInvitesList"
 import RoleInvitesList from "../../components/RoleInvitesList"
 import Restricted from "../../components/Restricted"
 import Api from "../../utils/api"
+import { Button } from 'react-bootstrap'
 
 const InvitesHome = (props) => {
   const [ isLoading, setIsLoading ] = useState(true)
@@ -53,7 +54,7 @@ const InvitesHome = (props) => {
       <Restricted allowed={["PROFESSOR", "ADMIN"]}>
         <div>
           <h3>Sent</h3>
-          <Link to="/invites/create">Invite</Link>
+          <Button href="/invites/create" size="sm" className="mb-3">Invite</Button>
           <RoleInvitesList invites={sentInvites} onInvitesTouched={handleInvitesTouched} />
         </div>
       </Restricted>

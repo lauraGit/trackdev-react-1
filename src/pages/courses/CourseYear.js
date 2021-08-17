@@ -81,7 +81,7 @@ const CourseYear = (props) => {
     <Tab eventKey="groups" title="Groups">
       <div className="course-year-tab">
         <Restricted allowed={["PROFESSOR"]}>
-          <Link to={`/courses/years/${courseYearId}/groups/create`}>New group</Link>
+          <Button href={`/courses/years/${courseYearId}/groups/create`} size="sm" className="mb-3">New group</Button>
         </Restricted>
         <Groups courseYearId={courseYearId} />
       </div>

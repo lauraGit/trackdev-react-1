@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
 import CoursesList from '../../components/CoursesList'
 import Restricted from '../../components/Restricted'
+import { Button } from 'react-bootstrap'
 
 const CoursesHome = () => {
   return (
@@ -9,7 +9,7 @@ const CoursesHome = () => {
         <h2>Courses</h2>
         <div>
           <Restricted allowed={["PROFESSOR"]}>
-            <Link to="/courses/create">New course</Link>
+            <Button href="/courses/create" size="sm" className="mb-3">New course</Button>
           </Restricted>
           <CoursesList />
         </div>

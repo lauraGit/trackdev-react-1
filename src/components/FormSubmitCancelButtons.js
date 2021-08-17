@@ -11,7 +11,7 @@ const FormSubmitCancelButtons = ({ submitButtonText, onCancelClick, cancelUrl })
       </Col>
       <Col xs="auto">
         { cancelUrl
-          ? <Link to={cancelUrl}>Cancel</Link>
+          ? <Button href={cancelUrl} variant="outline-secondary">Cancel</Button>
           : <Button type="button" onClick={onCancelClick} variant="outline-secondary">Cancel</Button>
         }        
       </Col>

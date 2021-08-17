@@ -44,7 +44,7 @@ const Group = ({ group }) => {
         <Form.Row>
           <Col><h2>{group.name}</h2></Col>
           <Col xs="auto">
-            <Link to={`/groups/${group.id}/edit`}>Edit group</Link>
+            <Button href={`/groups/${group.id}/edit`} size="sm" variant="outline-primary">Edit</Button>
           </Col>
           <Col xs="auto">
             <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">Delete</Button>
