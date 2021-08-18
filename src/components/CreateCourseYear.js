@@ -49,8 +49,8 @@ const CreateCourseYear = (props) => {
   // Render
   if(mode === "normal") {
     return (
-      <div>
-        <Button type="button" onClick={handleNewClick} variant="primary" size="sm" className="mb-3">
+      <div className="mb-3">
+        <Button type="button" onClick={handleNewClick} variant="primary" size="sm">
           New course year
         </Button>
       </div>
@@ -58,7 +58,7 @@ const CreateCourseYear = (props) => {
   }
 
   return (
-    <div>
+    <div className="mb-3">
       <h4>New course year</h4>
       <Form onSubmit={handleSubmit} noValidate validated={validated}>
         <Form.Group controlId="create-course-year-start-year">
