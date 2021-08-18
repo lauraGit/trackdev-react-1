@@ -50,11 +50,9 @@ const AddBacklogTask = ( { backlogId, onDataTouched }) => {
   // Render
   return (
     <Fragment>
-      <div>
-        <Button type="button" onClick={handleNewClick} variant="outline-primary" size="sm">
-          New task
-        </Button>
-      </div>
+      <Button type="button" onClick={handleNewClick} variant="outline-primary" size="sm">
+        New task
+      </Button>
       <Modal show={mode === "create"} onHide={onCancel} animation={false}>
         <Modal.Header>
           <Modal.Title>New task</Modal.Title>

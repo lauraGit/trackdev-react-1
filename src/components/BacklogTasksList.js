@@ -240,11 +240,15 @@ const BacklogTasksList = ({ backlog }) => {
               <DroppableBacklogTasksList listId={`sprint-tasks-${activeSprint.id}`} tasks={sprintTasks} onDataTouched={onSprintDataTouched} />                
             </div>
         )
-        : (<p>You don't have any active sprint.</p>)
+        : (<div><p>You don't have any active sprint.</p></div>)
       }
-      <AddBacklogTask backlogId={backlog.id} onDataTouched={onBacklogDataTouched} />
-      { activeSprint ? null : <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} /> }      
-      <DroppableBacklogTasksList listId="backlog-tasks" tasks={backlogTasks} onDataTouched={onBacklogDataTouched}/>
+      <div className="inline-buttons">
+        <AddBacklogTask backlogId={backlog.id} onDataTouched={onBacklogDataTouched} />
+        { activeSprint ? null : <CreateSprint backlogId={backlog.id} onDataTouched={onSprintsTouched} /> }
+      </div>
+      <div>
+        <DroppableBacklogTasksList listId="backlog-tasks" tasks={backlogTasks} onDataTouched={onBacklogDataTouched}/>
+      </div>      
     </DragDropContext>
   )
 
@@ -260,17 +264,17 @@ const BacklogTasksList = ({ backlog }) => {
     <div>
       <Tabs defaultActiveKey="backlogView" transition={false}>
         <Tab eventKey="backlogView" title="Backlog">
-          <div className="backlog-tasks-list__tab">
+          <div className="backlog-tasks-list__tab children-bottom-space">
             {backlogView}
           </div>          
         </Tab>
         <Tab eventKey="activeSprintView" title="Active Sprint">
-          <div className="backlog-tasks-list__tab">
+          <div className="backlog-tasks-list__tab children-bottom-space">
             {activeSprintView}
           </div>
         </Tab>
         <Tab eventKey="sprintsHistoryView" title="History">
-          <div className="backlog-tasks-list__tab">
+          <div className="backlog-tasks-list__tab children-bottom-space">
             {sprintsHistoryView}
           </div>          
         </Tab>

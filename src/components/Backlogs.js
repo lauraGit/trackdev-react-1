@@ -12,7 +12,7 @@ const Backlogs = ( { backlogs }) => {
     return (<p>There are no backlogs for this group.</p>)
   }
   return (
-    <div>
+    <div className="children-bottom-space">
       <BacklogHeadingSelector backlogs={backlogs} selected={backlog}
                               onBacklogChange={(b) => setBacklog(b)} />
       <BacklogTasksList backlog={backlog} />
