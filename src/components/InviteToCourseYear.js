@@ -50,7 +50,7 @@ const InviteToCourseYear = ( { courseYearId, onDataTouched } ) => {
   if(mode === "normal") {
     return (
       <div>
-        <Button type="button" onClick={handleNewClick} variant="primary">
+        <Button type="button" onClick={handleNewClick} variant="primary" size="sm" className="mb-3">
           Invite
         </Button>
       </div>

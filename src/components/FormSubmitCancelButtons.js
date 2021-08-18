@@ -1,7 +1,7 @@
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import { Link } from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap'
 
 const FormSubmitCancelButtons = ({ submitButtonText, onCancelClick, cancelUrl }) => {
   return (
@@ -11,7 +11,7 @@ const FormSubmitCancelButtons = ({ submitButtonText, onCancelClick, cancelUrl })
       </Col>
       <Col xs="auto">
         { cancelUrl
-          ? <Link to={cancelUrl}>Cancel</Link>
+          ? <LinkContainer to={cancelUrl} isActive={()=> false}><Button variant="outline-secondary">Cancel</Button></LinkContainer>
           : <Button type="button" onClick={onCancelClick} variant="outline-secondary">Cancel</Button>
         }        
       </Col>
