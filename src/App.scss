@@ -24,3 +24,16 @@ body {
 form .alert {
   margin-top: $spacer;
 }
+
+// Utilities
+.children-bottom-space > * {
+  margin-bottom: $spacer;
+}
+
+.children-bottom-space > *:last-child {
+  margin-bottom: 0;
+}
+
+.inline-buttons > * {
+  margin-right: $spacer * .5;
+}

@@ -60,11 +60,9 @@ const CreateSprint = ( { backlogId, onDataTouched } ) => {
   // Render
   return (
     <Fragment>
-      <div>
-        <Button type="button" onClick={handleNewClick} variant="outline-primary" size="sm">
-          New sprint
-        </Button>
-      </div>
+      <Button type="button" onClick={handleNewClick} variant="outline-primary" size="sm">
+        New sprint
+      </Button>
       <Modal show={mode === "create"} onHide={onCancel} animation={false}>
         <Modal.Header>
           <Modal.Title>New sprint</Modal.Title>

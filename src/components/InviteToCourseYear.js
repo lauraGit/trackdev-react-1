@@ -49,8 +49,8 @@ const InviteToCourseYear = ( { courseYearId, onDataTouched } ) => {
   // Render
   if(mode === "normal") {
     return (
-      <div>
-        <Button type="button" onClick={handleNewClick} variant="primary" size="sm" className="mb-3">
+      <div className="mb-3">
+        <Button type="button" onClick={handleNewClick} variant="primary" size="sm">
           Invite
         </Button>
       </div>
@@ -58,7 +58,7 @@ const InviteToCourseYear = ( { courseYearId, onDataTouched } ) => {
   }
 
   return (
-    <div>
+    <div className="mb-3">
       <h4>Invite to course year</h4>
       <Form onSubmit={handleSubmit} noValidate validated={validated}>
         <Form.Group controlId="invite-to-course-email">
