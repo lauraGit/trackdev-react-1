@@ -11,7 +11,7 @@ const Breadcrumbs = ({ links }) => {
         links.map((link, index) => {
           if(index < links.length - 1) {
             return (
-              <LinkContainer to={link.href || '#'} isActive={()=> false}>
+              <LinkContainer to={link.href || '#'} isActive={()=> false} key={index}>
                 <Breadcrumb.Item active={(index === links.length - 1)}>
                 {link.text}
                 </Breadcrumb.Item>
@@ -19,7 +19,7 @@ const Breadcrumbs = ({ links }) => {
             )
           }
           return (
-            <Breadcrumb.Item active={true}>
+            <Breadcrumb.Item active={true} key={index}>
               {link.text}
             </Breadcrumb.Item>
           )
