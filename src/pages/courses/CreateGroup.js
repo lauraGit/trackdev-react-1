@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import MultiListInput from '../../components/MultiListInput'
 import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
+import FormGoBack from '../../components/FormGoBack'
 import Api from '../../utils/api'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
@@ -75,6 +76,7 @@ class CreateGroup extends Component {
     return (
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-group">
+          <FormGoBack to={backUrl} />
           <h2>New group</h2>
           <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
             <Form.Group controlId="create-group-name">

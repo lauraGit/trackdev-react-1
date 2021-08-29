@@ -7,6 +7,7 @@ import withData from '../../components/withData'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
 import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
+import FormGoBack from '../../components/FormGoBack'
 
 class EditGroup extends Component {
   constructor(props) {
@@ -91,6 +92,7 @@ class EditGroup extends Component {
     return (
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="edit-group">
+          <FormGoBack to={backUrl} />
           <h2>Edit group</h2>
           <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
             <Form.Group controlId="edit-group-name">

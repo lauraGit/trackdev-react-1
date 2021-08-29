@@ -4,6 +4,7 @@ import Api from '../../utils/api'
 import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
+import FormGoBack from '../../components/FormGoBack'
 
 class CreateInvite extends Component {
   constructor(props) {
@@ -65,6 +66,7 @@ class CreateInvite extends Component {
     return (
       <Restricted allowed={["PROFESSOR", "ADMIN"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-invite">
+          <FormGoBack to={backUrl}/>
           <h2>Invite</h2>
           <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
             <Form.Group controlId="create-invite-email">

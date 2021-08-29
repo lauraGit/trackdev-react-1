@@ -5,6 +5,7 @@ import RoleInvitesList from "../../components/RoleInvitesList"
 import Restricted from "../../components/Restricted"
 import Api from "../../utils/api"
 import { Button } from 'react-bootstrap'
+import Breadcrumbs from "../../components/Breadcrumbs"
 
 const InvitesHome = (props) => {
   const [ isLoading, setIsLoading ] = useState(true)
@@ -44,8 +45,13 @@ const InvitesHome = (props) => {
     return <p>Error retrieving data.</p>
   }
 
+  let links = [];
+  links.push({ text: "Home", href: '/'});
+  links.push({ text: "Invites" });
+
   return (
     <div>
+      <Breadcrumbs links={links} />
       <h2>Invites</h2>
       <div>
         <h3>Received</h3>

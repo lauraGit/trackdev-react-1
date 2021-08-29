@@ -5,6 +5,7 @@ import CourseHeaderEditable from "../../components/CourseHeaderEditable"
 import CourseYearsList from "../../components/CourseYearsList"
 import CreateCourseYear from "../../components/CreateCourseYear"
 import Restricted from '../../components/Restricted'
+import Breadcrumbs from "../../components/Breadcrumbs"
 
 class Course extends Component {
   constructor(props) {
@@ -51,10 +52,16 @@ class Course extends Component {
     if(!this.state.course) {
       return (<p>You have no course to see here.</p>)
     }
+    let links = [];
+    links.push({ text: "Home", href: '/'});
+    links.push({ text: "Courses", href: '/courses' });
+    links.push({ text: this.state.course.name })
+
     const course = this.state.course
     return (
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
-        <div>              
+        <div>
+          <Breadcrumbs links={links} />             
           <CourseHeaderEditable
             course={course}
             onCourseChange={this.handleCourseChange} />

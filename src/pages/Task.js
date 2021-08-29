@@ -8,6 +8,7 @@ import EditableHeader from "../components/EditableHeader"
 import TaskSubtasks from '../components/TaskSubtasks'
 import TaskFields from '../components/TaskFields'
 import TaskTimeline from '../components/TaskTimeline'
+import Breadcrumbs from '../components/Breadcrumbs'
 
 const Task = ( { task, onDataTouched }) => {
   const [ errors, setErrors ] = useState({})
@@ -46,8 +47,15 @@ const Task = ( { task, onDataTouched }) => {
     return null
   }
 
+  let links = [];
+  if(group != null) {
+    links.push({ text: group.name, href: `/groups/${group.id}`});
+    links.push({ text: `${task.id} - ${task.name}` });
+  }
+
   return (
     <div>
+      <Breadcrumbs links={links} />
       <div className="task-header">
         <Link className="task-header__key" to={`/tasks/${task.id}`}>{task.id}</Link>
         <span> - </span>

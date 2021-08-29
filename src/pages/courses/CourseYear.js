@@ -18,6 +18,7 @@ import Col from 'react-bootstrap/Col'
 import { LinkContainer } from 'react-router-bootstrap'
 import UserContext from "../../contexts/UserContext"
 import withData from "../../components/withData"
+import Breadcrumbs from '../../components/Breadcrumbs'
 
 const Groups = withData(
   CourseGroupsList,
@@ -106,6 +107,19 @@ const CourseYear = (props) => {
   )
 
   const isProfessor = user?.profile?.roles && user.profile.roles.some(r => r === "PROFESSOR")
+  const fullName = courseYear?.course?.name + " " + courseYear?.startYear
+  let links = [];
+  if(courseYear && courseYear.course) {
+    links.push({ text: "Home", href: '/'});
+    if(isProfessor) {
+      links.push({ text: "Courses", href: '/courses' });
+      links.push({ text: courseYear.course.name, href: `/courses/${courseYear.course.id}` })
+      links.push({ text: courseYear.startYear })
+    } else {
+      links.push({ text: "Courses", href: '/courses/years' });
+      links.push({ text: fullName })
+    }    
+  }
 
   // Render
   if(isLoading) {
@@ -117,9 +131,10 @@ const CourseYear = (props) => {
   if(deleted) {
     return (<Redirect to={`/courses/${courseYear.course.id}`} />)
   }
-  const fullName = courseYear.course?.name + " " + courseYear.startYear
+  
   return (
     <div>
+      <Breadcrumbs links={links} />
       <Restricted allowed={["PROFESSOR"]} fallback={(<h2>{fullName}</h2>)}>
         <Form.Row>
           <Col><h2>{fullName}</h2></Col>
