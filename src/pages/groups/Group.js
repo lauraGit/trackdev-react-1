@@ -11,6 +11,7 @@ import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import { LinkContainer } from 'react-router-bootstrap'
+import Breadcrumbs from '../../components/Breadcrumbs'
 
 const Group = ({ group }) => {
   const [error, setError] = useState(null)
@@ -39,8 +40,13 @@ const Group = ({ group }) => {
   if(deleted) {
     return (<Redirect to={`/courses/years/${group.courseYear.id}`} />)
   }
+  let links = [];
+  const fullName = `${group.courseYear?.course?.name} ${group.courseYear.startYear}`
+  links.push({ text: fullName, href: `/courses/years/${group.courseYear.id}` });
+  links.push({ text: group.name })
   return (
     <div>
+      <Breadcrumbs links={links} />
       <Restricted allowed={["PROFESSOR"]} fallback={(<h2>{group.name}</h2>)}>
         <Form.Row>
           <Col><h2>{group.name}</h2></Col>

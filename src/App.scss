@@ -8,6 +8,11 @@ body {
   padding: 20px 0;
 }
 
+.breadcrumb,
+.form-go-back {
+  margin-top: -10px;
+}
+
 .login,
 .register {
   max-width: 400px;

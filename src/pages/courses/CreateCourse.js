@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import Restricted from '../../components/Restricted'
 import Api from '../../utils/api'
 import FormSubmitCancelButtons from '../../components/FormSubmitCancelButtons'
+import FormGoBack from '../../components/FormGoBack'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
 
@@ -50,9 +51,11 @@ class CreateCourse extends Component {
     if(this.state.created) {
       return (<Redirect to={`/courses/${this.state.courseId}`} />)
     }
+    const backUrl = "/courses"
     return (
       <Restricted allowed={["PROFESSOR"]} fallback={(<p>You don't have access to here.</p>)}>
         <div className="create-course">
+          <FormGoBack to={backUrl} />
           <h2>New course</h2>
           <Form onSubmit={this.handleSubmit} noValidate validated={this.state.validated}>
             <Form.Group controlId="create-course-name">
@@ -62,7 +65,7 @@ class CreateCourse extends Component {
                 Please enter a valid name.
               </Form.Control.Feedback>
             </Form.Group>
-            <FormSubmitCancelButtons submitButtonText="Create course" cancelUrl="/courses" />
+            <FormSubmitCancelButtons submitButtonText="Create course" cancelUrl={backUrl} />
             {
               this.state.error ? (<Alert variant="danger">{this.state.error}</Alert>) : null
             }
