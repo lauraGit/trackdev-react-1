@@ -10,7 +10,6 @@ const TaskFields = ( { task, group, onDataTouched }) => {
   const [ estimationEditStatus, setEstimationEditStatus ] = useState({ status: 'normal', error: null})
   const [ statusEditStatus, setStatusEditStatus ] = useState({ status: 'normal', error: null})
   const [ assigneeEditStatus, setAssigneeEditStatus ] = useState({ status: 'normal', error: null})
-  const statusOptions = [ "TODO", "INPROGRESS", "DONE", "TESTED", "SPRINT", "DELETED", "CREATED" ]
 
   // ESTIMATION EDIT
   // --------------------------------------------------------------
@@ -73,54 +72,77 @@ const TaskFields = ( { task, group, onDataTouched }) => {
   const possibleAssignees = groupMembers
         .map(user => { return {value: user.username, text: user.username }})
   possibleAssignees.push({value: '', text: 'Unassigned'})
+  
+  const statusOptions = ["TODO", "INPROGRESS", "TESTED", "DONE" ]
+  const statusEditable = statusOptions.some(x => x === task.status)
+
+  const notEditableText = "Field not editable"
+  const editableText = "Edit field"
 
   return (
     <div className="task-fields">
       <div className="task-field">
         <div className="task-field__name">Reporter:</div>
-        <div><UserMention user={task.reporter} /></div>
+        <div title={notEditableText}><UserMention user={task.reporter} /></div>
       </div>
       <div className="task-field">
         <div className="task-field__name">Created at:</div>
-        <div>{new Date(task.createdAt).toLocaleDateString()}</div>
+        <div title={notEditableText}>{new Date(task.createdAt).toLocaleDateString()}</div>
       </div>
       <div className="task-field">
         <div className="task-field__name">Assignee:</div>
-        <div><EditableField
-          fieldView={ task.assignee ? <UserMention user={task.assignee} /> : '-' }
-          as="select"
-          status={assigneeEditStatus.status}
-          error={assigneeEditStatus.error}
-          value={task.assignee?.username || ''}
-          onChange={handleAssigneeChange}>
-            {
-              possibleAssignees.map(option => (<option key={option.value} value={option.value}>{option.text}</option>))
-            }
-          </EditableField></div>
+        <div title={editableText}>
+          <EditableField
+            fieldView={ task.assignee ? <UserMention user={task.assignee} /> : '-' }
+            as="select"
+            status={assigneeEditStatus.status}
+            error={assigneeEditStatus.error}
+            value={task.assignee?.username || ''}
+            onChange={handleAssigneeChange}>
+              {
+                possibleAssignees.map(option => (<option key={option.value} value={option.value}>{option.text}</option>))
+              }
+          </EditableField>
+        </div>
       </div>
       <div className="task-field">
         <div className="task-field__name">Estimation:</div>
-        <div><EditableField
-          fieldView={(task.estimationPoints ? <EstimationPoints estimationPoints={task.estimationPoints} /> : '-')}
-          status={estimationEditStatus.status}
-          error={estimationEditStatus.error}
-          value={task.estimationPoints}
-          onChange={handleEstimationChange} /></div>
+        <div title={editableText}>
+          <EditableField
+            fieldView={(task.estimationPoints ? <EstimationPoints estimationPoints={task.estimationPoints} /> : '-')}
+            status={estimationEditStatus.status}
+            error={estimationEditStatus.error}
+            value={task.estimationPoints}
+            onChange={handleEstimationChange} />
+        </div>
       </div>
       <div className="task-field">
         <div className="task-field__name">Status:</div>
-        <div><EditableField
-          fieldView={(<TaskStatus status={task.status}/>)}
-          as="select"
-          status={statusEditStatus.status}
-          error={statusEditStatus.error}
-          value={task.status}
-          options={statusOptions}
-          onChange={handleStatusChange}>
-            {
-                statusOptions.map(option => (<option key={option} value={option}>{option}</option>))
-            }
-          </EditableField></div>
+        
+          {
+            statusEditable ?
+              (
+                <div title={editableText}>
+                  <EditableField
+                    fieldView={(<TaskStatus status={task.status}/>)}
+                    as="select"
+                    status={statusEditStatus.status}
+                    error={statusEditStatus.error}
+                    value={task.status}
+                    options={statusOptions}
+                    onChange={handleStatusChange}>
+                      {
+                          statusOptions.map(option => (<option key={option} value={option}>{option}</option>))
+                      }
+                    </EditableField>
+                  </div>
+              )
+              : (
+                <div title={notEditableText}>
+                  <TaskStatus status={task.status}/>
+                </div>
+              )
+          }
       </div>
     </div>
   ) 

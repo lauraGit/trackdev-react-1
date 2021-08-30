@@ -16,3 +16,14 @@
 .editable-field .editable-field__buttons > * {
   margin-right: 10px;
 }
+
+.editable-field__field {
+  width: 100%;
+  display: inline-block;  
+}
+
+.editable-field__field:hover,
+.editable-field__field:focus {
+  background-color: #eee;
+  border-radius: 2px;
+}

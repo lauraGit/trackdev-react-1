@@ -2,7 +2,7 @@ import './active-sprint-columns.css'
 import ColumnTaskItem from "./ColumnTaskItem"
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
-const possibleStatus = ["CREATED", "TODO", "INPROGRESS", "TESTED", "DONE", "DELETED"]
+const possibleStatus = ["TODO", "INPROGRESS", "TESTED", "DONE"]
 
 function initColumns(tasks) {
   var columns = {}

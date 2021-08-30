@@ -9,6 +9,10 @@ import TaskSubtasks from '../components/TaskSubtasks'
 import TaskFields from '../components/TaskFields'
 import TaskTimeline from '../components/TaskTimeline'
 import Breadcrumbs from '../components/Breadcrumbs'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
 
 const Task = ( { task, onDataTouched }) => {
   const [ errors, setErrors ] = useState({})
@@ -40,7 +44,20 @@ const Task = ( { task, onDataTouched }) => {
       .catch(error => {
         setErrors({ editName: error?.details?.message || 'Unknown error' })
       })
-  }   
+  }
+  
+  function handleDeleteClick() {
+    var requestBody = {
+      status: 'DELETED'
+    }
+    Api.patch(`/tasks/${task.id}`, requestBody)
+      .then(() => {
+        onDataTouched()
+      })
+      .catch(error => {
+        setErrors({ delete: error?.details?.message || 'Unknown error'}) 
+      })
+  }
 
   // RENDER
   if(!task) {
@@ -56,21 +73,38 @@ const Task = ( { task, onDataTouched }) => {
   return (
     <div>
       <Breadcrumbs links={links} />
-      <div className="task-header">
-        <Link className="task-header__key" to={`/tasks/${task.id}`}>{task.id}</Link>
-        <span> - </span>
-        <div className="task-header__name">
-          <EditableHeader
-                  title={task.name}              
-                  isEditing={isEditing}
-                  error={errors?.editName}
-                  fieldLabel="Name"
-                  fieldValidationMessage="Please enter a valid name"
-                  onEditing={(isEditing) => setIsEditing(isEditing)}
-                  onChange={handleNameChange}
-                />
-        </div>        
-      </div>
+      <Form.Row className="align-items-center">
+        <Col>
+          <div className="task-header">
+            <Link className="task-header__key" to={`/tasks/${task.id}`}>{task.id}</Link>
+            <span> - </span>
+            <div className="task-header__name">
+              <EditableHeader
+                      title={task.name}              
+                      isEditing={isEditing}
+                      error={errors?.editName}
+                      fieldLabel="Name"
+                      fieldValidationMessage="Please enter a valid name"
+                      onEditing={(isEditing) => setIsEditing(isEditing)}
+                      onChange={handleNameChange}
+                    />
+            </div>        
+          </div>
+        </Col>
+        <Col xs="auto">
+          {
+            task.status !== 'DELETED' ? (
+              <Button type="button" onClick={handleDeleteClick} variant="outline-secondary" size="sm">
+                Delete
+              </Button>
+              )
+              : null
+          }          
+        </Col>
+      </Form.Row>
+      {
+        errors?.delete ? <Alert variant="danger" dismissible onClose={() => setErrors({})}>{errors.delete}</Alert> : null
+      }
       <div>
         <TaskFields task={task} group={group} onDataTouched={onDataTouched} />
       </div>
