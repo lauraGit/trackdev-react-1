@@ -128,11 +128,18 @@ const Task = ( { task, onDataTouched }) => {
                 />
         </div>        
       </div>
-      <div>
-        <div>Reporter: <UserMention user={task.reporter} /></div>
-        <div>Created at: {new Date(task.createdAt).toLocaleDateString()}</div>
-        <div>
-          Assignee: <EditableField
+      <div className="task-fields">
+        <div className="task-field">
+          <div className="task-field__name">Reporter:</div>
+          <div><UserMention user={task.reporter} /></div>
+        </div>
+        <div className="task-field">
+          <div className="task-field__name">Created at:</div>
+          <div>{new Date(task.createdAt).toLocaleDateString()}</div>
+        </div>
+        <div className="task-field">
+          <div className="task-field__name">Assignee:</div>
+          <div><EditableField
             fieldView={ task.assignee ? <UserMention user={task.assignee} /> : '-' }
             as="select"
             status={assigneeEditStatus.status}
@@ -142,18 +149,20 @@ const Task = ( { task, onDataTouched }) => {
               {
                 possibleAssignees.map(option => (<option key={option.value} value={option.value}>{option.text}</option>))
               }
-            </EditableField>
+            </EditableField></div>
         </div>
-        <div>
-          Estimation: <EditableField
+        <div className="task-field">
+          <div className="task-field__name">Estimation:</div>
+          <div><EditableField
             fieldView={(task.estimationPoints ? <EstimationPoints estimationPoints={task.estimationPoints} /> : '-')}
             status={estimationEditStatus.status}
             error={estimationEditStatus.error}
             value={task.estimationPoints}
-            onChange={handleEstimationChange} />
+            onChange={handleEstimationChange} /></div>
         </div>
-        <div>
-          Status: <EditableField
+        <div className="task-field">
+          <div className="task-field__name">Status:</div>
+          <div><EditableField
             fieldView={(<TaskStatus status={task.status}/>)}
             as="select"
             status={statusEditStatus.status}
@@ -164,7 +173,7 @@ const Task = ( { task, onDataTouched }) => {
               {
                   statusOptions.map(option => (<option key={option} value={option}>{option}</option>))
               }
-            </EditableField>
+            </EditableField></div>
         </div>
       </div>
       <div>

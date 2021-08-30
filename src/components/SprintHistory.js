@@ -31,7 +31,7 @@ const SprintHistory = ({backlogId, sprint}) => {
 
   useEffect(function() {
     dispatch({ type: 'sprintChange', payload: { sprint: sprint }})
-  }, sprint)
+  }, [sprint])
 
   function toggleCollapse() {
     dispatch({ type: 'toggleSprint'})

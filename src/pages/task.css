@@ -2,6 +2,7 @@
   .task-header {
     display: flex;
     align-items: center;
+    margin-bottom: 16px;
   }
   
   .task-header > * {
@@ -17,3 +18,19 @@
   }
 }
 
+@media (min-width: 768px) {
+  .task-fields {
+    column-count: 3;
+    column-gap: 40px;
+    margin-bottom: 10px;
+    column-rule: 1px solid #aaa;
+  }
+}
+
+.task-field {
+  column-count: 2;
+}
+
+.task-field__name {
+  color: #555;
+}
