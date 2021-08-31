@@ -5,10 +5,12 @@ import Header from './components/Header'
 import Main from './components/Main'
 import MainRoutes from './pages/MainRoutes'
 import Container from 'react-bootstrap/Container'
+import Alert from 'react-bootstrap/Alert'
 import Api from './utils/api'
 
 function App() {
   const [user, setUser] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() =>  {
     requestUserSelf()
@@ -27,6 +29,8 @@ function App() {
         if(error.status === 403 || error.status === 404) {
           const user = { isLoggedIn: false, profile: null }
           setUser(user)
+        } else {
+          setError('Error while trying to recover session')
         }
       })
   }
@@ -38,7 +42,11 @@ function App() {
           <Header />
           <Container fluid="lg">
             <Main>
-              <MainRoutes />
+              {
+                error
+                  ? (<Alert variant="danger">{error}</Alert>)
+                  : (<MainRoutes />)
+              }              
             </Main>
           </Container>
         </div>
