@@ -9,21 +9,6 @@ const EditableField = ({ id, fieldView, as, value, fieldLabel, status, error, on
   const [ isLoading, setIsLoading ] = useState(false)
   const [ newValue, setNewValue ] = useState(null)
   const input = createRef()
-  const dialog = createRef()
-
-  useEffect(function() {
-    if(isEditing) {
-      function onClickOutsideHandler(e) {
-        if(isEditing && dialog.current && !dialog.current.contains(e.target)) {
-          cancelEdit()
-        }
-      }    
-      window.addEventListener('click', onClickOutsideHandler)
-      return () => {
-        window.removeEventListener('click', onClickOutsideHandler)
-      }
-    }
-  }, [window, isEditing, dialog])
 
   useEffect(function() {
     if(isEditing && status === 'saving') {
@@ -91,7 +76,7 @@ const EditableField = ({ id, fieldView, as, value, fieldLabel, status, error, on
       {
         isEditing ? 
         (
-          <span className="editable-field__dialog" role="dialog" onKeyDown={handleFormKeyDown} onBlur={handleFormBlur} ref={dialog}>
+          <span className="editable-field__dialog" role="dialog" onKeyDown={handleFormKeyDown} onBlur={handleFormBlur} >
             <Form onSubmit={handleFormSubmit}>
             <Form.Group controlId={controlId}>
               <Form.Label srOnly>{fieldLabel}</Form.Label>
