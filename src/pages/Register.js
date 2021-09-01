@@ -52,7 +52,7 @@ class Register extends Component {
 
   render() {
     if(this.state.registered) {
-      return (<div><p>You have registered successfully.</p></div>)
+      return (<div><p>You have registered successfully. Go to <Link to="/login">login</Link>.</p></div>)
     }
     return (
       <div className="register">
@@ -60,9 +60,9 @@ class Register extends Component {
         <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
           <Form.Group controlId="register-username">
             <Form.Label>Username</Form.Label>
-            <Form.Control name="username" value={this.state.username} onChange={this.handleInputChange} required />
+            <Form.Control name="username" value={this.state.username} onChange={this.handleInputChange} required minLength="4" />
             <Form.Control.Feedback type="invalid">
-              Please enter valid a username.
+              Please enter valid a username of at least 4 characters long and only letters or numbers.
             </Form.Control.Feedback>
           </Form.Group>
           
@@ -76,9 +76,9 @@ class Register extends Component {
 
           <Form.Group controlId="register-password">
             <Form.Label>Password</Form.Label>
-            <Form.Control name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required />
+            <Form.Control name="password" type="password" value={this.state.password} onChange={this.handleInputChange} required minLength="8" maxLength="50" />
             <Form.Control.Feedback type="invalid">
-              Please enter a valid password.
+              Please enter a valid password of at least 8 characters long.
             </Form.Control.Feedback>
           </Form.Group>
 
