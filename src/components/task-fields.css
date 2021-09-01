@@ -1,14 +1,27 @@
 @media (min-width: 768px) {
   .task-fields {
-    column-count: 3;
-    column-gap: 40px;
-    margin-bottom: 10px;
-    column-rule: 1px solid #aaa;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .task-field {
+    width: 33%;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-right: 1px solid #aaa;
   }
 }
 
 .task-field {
-  column-count: 2;
+  display: flex;
+}
+
+.task-field > * {
+  width: 50%;
+}
+
+.task-field:nth-child(3) {
+    border-right: none;
 }
 
 .task-field__name {
