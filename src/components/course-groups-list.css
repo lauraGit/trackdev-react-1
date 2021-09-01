@@ -1,4 +1,12 @@
-.course-groups-list > * {
-  display: inline-block;
-  width: 33%;
+@media (min-width: 576px) {
+  .course-groups-list > * {
+    display: inline-block;
+    width: 50%;
+  }
+}
+
+@media (min-width: 768px) {
+  .course-groups-list > * {
+    width: 33%;
+  }
 }
