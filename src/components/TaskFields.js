@@ -73,8 +73,15 @@ const TaskFields = ( { task, group, onDataTouched }) => {
         .map(user => { return {value: user.username, text: user.username }})
   possibleAssignees.push({value: '', text: 'Unassigned'})
   
-  const statusOptions = ["TODO", "INPROGRESS", "TESTED", "DONE" ]
-  const statusEditable = statusOptions.some(x => x === task.status)
+  let statusOptions = []
+  let statusEditable = false
+  if(task.status === "CREATED") {
+    statusOptions = ["CREATED", "TODO"]
+    statusEditable = true
+  } else {
+    statusOptions = ["TODO", "INPROGRESS", "TESTED", "DONE" ]
+    statusEditable = statusOptions.some(x => x === task.status)
+  }
 
   const notEditableText = "Field not editable"
   const editableText = "Edit field"
